@@ -9,3 +9,10 @@ git clone https://github.com/azlux/log2ram.git
 cd log2ram
 sudo ./install.sh
 ```
+
+You can now check the mount folder in ram with
+```
+df -h
+mount
+```
+and change size into /usr/bin/log2ram if mendatory
