@@ -1,0 +1,14 @@
+[Unit]
+Description=Log2Ram
+
+[Service]
+ExecStart= /usr/local/bin/ramlog start
+ExecStop= /usr/local/bin/ramlog stop
+ExecReload= /usr/local/bin/ramlog write
+
+Before=syslog.target mysql.service fail2ban.service nginx.service rsyslog.service
+
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
