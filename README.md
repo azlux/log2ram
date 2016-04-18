@@ -7,6 +7,7 @@ Log2Ram is based on transient log for Systemd here : [A transient /var/log](http
 ```
 git clone https://github.com/azlux/log2ram.git
 cd log2ram
+chmod +x install.sh
 sudo ./install.sh
 ```
 
@@ -15,4 +16,4 @@ You can now check the mount folder in ram with
 df -h
 mount
 ```
-and change size into /usr/bin/log2ram if mendatory
+and change size into /usr/bin/log2ram if necessary
