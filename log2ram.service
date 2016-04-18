@@ -2,9 +2,9 @@
 Description=Log2Ram
 
 [Service]
-ExecStart= /usr/local/bin/ramlog start
-ExecStop= /usr/local/bin/ramlog stop
-ExecReload= /usr/local/bin/ramlog write
+ExecStart= /usr/local/bin/log2ram start
+ExecStop= /usr/local/bin/log2ram stop
+ExecReload= /usr/local/bin/log2ram write
 
 Before=syslog.target mysql.service fail2ban.service nginx.service rsyslog.service
 
