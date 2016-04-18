@@ -1,0 +1,25 @@
+#!/bin/sh
+
+HDD_LOG=/var/log.hdd/
+RAM_LOG=/var/log/
+SIZE=40M
+
+case "$1" in
+  start)
+      [ -d $HDD_LOG ] || mkdir $HDD_LOG
+      mount --bind $RAM_LOG $HDD_LOG
+      mount --make-private $HDD_LOG
+      mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size=$SIZE ramlog $RAM_LOG
+      cp -rfup $HDD_LOG -T $RAM_LOG
+      ;;
+
+  stop)
+      cp -rfup $RAM_LOG -T $HDD_LOG
+      umount -l $RAM_LOG
+      umount -l $HDD_LOG
+      ;;
+
+  write)
+      cp -rfup $RAM_LOG -T $HDD_LOG
+      ;;
+esac
