@@ -19,6 +19,6 @@ You can now check the mount folder in ram with
 df -h
 mount
 ```
-and change size into /usr/bin/log2ram if necessary
+and change size into /usr/local/bin/log2ram if necessary
 
 ######Now, muffins for everyone !
