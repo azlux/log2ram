@@ -9,7 +9,7 @@ case "$1" in
       [ -d $HDD_LOG ] || mkdir $HDD_LOG
       mount --bind $RAM_LOG $HDD_LOG
       mount --make-private $HDD_LOG
-      mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size=$SIZE ramlog $RAM_LOG
+      mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size=$SIZE log2ram $RAM_LOG
       cp -rfup $HDD_LOG -T $RAM_LOG
       ;;
 
