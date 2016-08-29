@@ -13,12 +13,15 @@ chmod +x install.sh
 sudo ./install.sh
 ```
 
+into /usr/local/bin/log2ram
+- You can change the SIZE variable if necessary
+- If you prefer to use rsync, you can set the USE_RSYNC variable to `true`
+
 #####It is working ?
 You can now check the mount folder in ram with
 ```
 df -h
 mount
 ```
-and change size into /usr/local/bin/log2ram if necessary
 
 ######Now, muffins for everyone !
