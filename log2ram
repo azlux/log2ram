@@ -3,7 +3,7 @@
 HDD_LOG=/var/log.hdd/
 RAM_LOG=/var/log/
 SIZE=40M
-USE_RSYN=false
+USE_RSYNC=false
 
 case "$1" in
   start)
@@ -11,7 +11,7 @@ case "$1" in
       mount --bind $RAM_LOG $HDD_LOG
       mount --make-private $HDD_LOG
       mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size=$SIZE log2ram $RAM_LOG
-      if ["$USE_RSYN" = true]; then
+      if ["$USE_RSYNC" = true]; then
           rsync -aXWv --delete --links $HDD_LOG $RAM_LOG
       else
           cp -rfup $HDD_LOG -T $RAM_LOG
@@ -19,7 +19,7 @@ case "$1" in
       ;;
 
   stop)
-      if ["$USE_RSYN" = true]; then
+      if ["$USE_RSYNC" = true]; then
           rsync -aXWv --delete --links $RAM_LOG $HDD_LOG
       else
           cp -rfup $RAM_LOG -T $HDD_LOG
@@ -29,7 +29,7 @@ case "$1" in
       ;;
 
   write)
-      if ["$USE_RSYN" = true]; then
+      if ["$USE_RSYNC" = true]; then
           rsync -aXWv --delete --links $RAM_LOG $HDD_LOG
       else
           cp -rfup $RAM_LOG -T $HDD_LOG
