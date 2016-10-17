@@ -19,7 +19,7 @@ case "$1" in
       ;;
 
   stop)
-      if ["$USE_RSYNC" = true]; then
+      if [[ "$USE_RSYNC" = true ]]; then
           rsync -aXWv --delete --links $RAM_LOG $HDD_LOG
       else
           cp -rfup $RAM_LOG -T $HDD_LOG
@@ -29,7 +29,7 @@ case "$1" in
       ;;
 
   write)
-      if ["$USE_RSYNC" = true]; then
+      if [[ "$USE_RSYNC" = true ]]; then
           rsync -aXWv --delete --links $RAM_LOG $HDD_LOG
       else
           cp -rfup $RAM_LOG -T $HDD_LOG
