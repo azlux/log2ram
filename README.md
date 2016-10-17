@@ -19,7 +19,7 @@ into /usr/local/bin/log2ram
 
 ## Customize
 #### services :
-If you open the file `/etc/systemd/system/log2ram.service` , you will see a line starting with `Before=`, you can list here the services who need to start after log2ram, it's append when services start too fast and stop running because log2ram mount a ram folder in the same place.
+If you open the file `/etc/systemd/system/log2ram.service` , you will see a line starting by `Before=`, you can list here the services who need to start after log2ram. You will need to change this line when a service start too fast and stop running because log2ram mount a ram folder where it has start to write log.
 
 For example, If you use apache instead of nginx, add `apache2.service` into this line.
 
@@ -28,7 +28,7 @@ Into the file `log2ram` (or `/usr/local/bin/log2ram` if you have already install
 
 The first variable define the size the log folder will reserve into the RAM.
 
-The second variable can be set to `true` if you prefer "rsync" than "cp"
+The second variable can be set to `true` if you prefer "rsync" than "cp".
 
 ###It is working ?
 You can now check the mount folder in ram with
