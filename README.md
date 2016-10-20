@@ -1,7 +1,9 @@
 # Log2Ram
-Like ramlog for systemd on debian 8 jessie.
+Like ramlog for systemd (on debian 8 jessie for example).
 
 Usefull for **Raspberry** for not writing all the time on the SD card. You need it because your SD card don't want to suffer anymore !
+
+The script [log2ram](log2ram) can work on every linux system. So you can use it with your own daemon manager if you don't have systemd.
 
 Log2Ram is based on transient log for Systemd here : [A transient /var/log](https://www.debian-administration.org/article/661/A_transient_/var/log)
 
