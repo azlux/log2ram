@@ -3,6 +3,7 @@ Description=Log2Ram
 Before=syslog.target mysql.service fail2ban.service nginx.service rsyslog.service
 
 [Service]
+Type=oneshot
 ExecStart= /usr/local/bin/log2ram start
 ExecStop= /usr/local/bin/log2ram stop
 ExecReload= /usr/local/bin/log2ram write
