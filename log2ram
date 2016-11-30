@@ -6,7 +6,18 @@ LOG2RAM_LOG="${HDD_LOG}log2ram.log"
 SIZE=40M
 USE_RSYNC=false
 
-sync () {
+syncToDisk () {
+    [ -d $HDD_LOG ] || echo "ERROR: $HDD_LOG doesn't exist!  Can't sync."
+    [ -d $HDD_LOG ] || exit 1
+
+    if [ "$USE_RSYNC" = true ]; then
+        rsync -aXWv --delete --links $RAM_LOG $HDD_LOG 2>&1 | tee -a $LOG2RAM_LOG
+    else
+        cp -rfup $RAM_LOG -T $HDD_LOG 2>&1 | tee -a $LOG2RAM_LOG
+    fi
+}
+
+syncFromDisk () {
     [ -d $HDD_LOG ] || echo "ERROR: $HDD_LOG doesn't exist!  Can't sync."
     [ -d $HDD_LOG ] || exit 1
 
@@ -17,22 +28,23 @@ sync () {
     fi
 }
 
+
 case "$1" in
   start)
       [ -d $HDD_LOG ] || mkdir $HDD_LOG
       mount --bind $RAM_LOG $HDD_LOG
       mount --make-private $HDD_LOG
       mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size=$SIZE log2ram $RAM_LOG
-      sync
+      syncFromDisk
       ;;
 
   stop)
-      sync
+      syncToDisk
       umount -l $RAM_LOG
       umount -l $HDD_LOG
       ;;
 
   write)
-      sync
+      syncToDisk
       ;;
 esac
