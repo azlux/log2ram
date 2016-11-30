@@ -7,6 +7,9 @@ SIZE=40M
 USE_RSYNC=false
 
 sync () {
+    [ -d $HDD_LOG ] || echo "ERROR: $HDD_LOG doesn't exist!  Can't sync."
+    [ -d $HDD_LOG ] || exit 1
+
     if [ "$USE_RSYNC" = true ]; then
         rsync -aXWv --delete --links $HDD_LOG $RAM_LOG 2>&1 | tee -a $LOG2RAM_LOG
     else
