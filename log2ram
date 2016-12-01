@@ -1,7 +1,7 @@
 #!/bin/sh
 
 SIZE=40M
-USE_RSYNC=true
+USE_RSYNC=false
 
 # don't touch anything below here.
 
