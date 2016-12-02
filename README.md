@@ -38,5 +38,6 @@ You can now check the mount folder in ram with
 df -h
 mount
 ```
+By default, the program will write log into the HardDisk every hour and the log for log2ram will be write here : `/var/log.hdd/log2ram.log`
 
 ######Now, muffins for everyone !
