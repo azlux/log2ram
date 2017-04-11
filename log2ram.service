@@ -1,6 +1,11 @@
 [Unit]
 Description=Log2Ram
-Before=syslog.target mysql.service fail2ban.service nginx.service rsyslog.service
+DefaultDependencies=no
+Before=rsyslog.service syslog.target systemd-journald.service sysinit.target shutdown.target
+After=local-fs.target
+Conflicts=shutdown.target
+RequiresMountsFor=/var/log /var/log.hdd
+IgnoreOnIsolate=yes
 
 [Service]
 Type=oneshot
@@ -10,4 +15,4 @@ ExecReload= /usr/local/bin/log2ram write
 RemainAfterExit=yes
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=sysinit.target
