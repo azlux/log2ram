@@ -28,7 +28,7 @@ The first variable define the size the log folder will reserve into the RAM.
 
 The second variable can be set to `true` if you prefer "rsync" than "cp".
 
-###It is working ?
+### It is working ?
 You can now check the mount folder in ram with
 ```
 df -h
@@ -36,4 +36,4 @@ mount
 ```
 By default, the program will write log into the HardDisk every hour and the log for log2ram will be write here : `/var/log.hdd/log2ram.log`
 
-######Now, muffins for everyone !
+###### Now, muffins for everyone !
