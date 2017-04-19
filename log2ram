@@ -28,6 +28,11 @@ syncToDisk () {
 syncFromDisk () {
     isSafe
 
+    if [ ! -z `du -sh -t $SIZE $HDD_LOG | cut -f1` ]; then
+        echo "ERROR: RAM disk too small. Can't sync."
+        exit 1
+    fi
+
     if [ "$USE_RSYNC" = true ]; then
         rsync -aXWv --delete --exclude log2ram.log --links $HDD_LOG $RAM_LOG 2>&1 | $LOG_OUTPUT
     else
