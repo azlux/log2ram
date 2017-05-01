@@ -6,6 +6,8 @@ then
   chmod 644 /etc/systemd/system/log2ram.service
   cp log2ram /usr/local/bin/log2ram
   chmod a+x /usr/local/bin/log2ram
+  cp log2ram.conf /etc/log2ram.conf
+  chmod 644 /etc/log2ram.conf
   systemctl enable log2ram
   cp log2ram.hourly /etc/cron.hourly/log2ram
   chmod +x /etc/cron.hourly/log2ram
@@ -14,3 +16,6 @@ then
 else
   echo "You need to be ROOT (sudo can be used)"
 fi
+
+
+-rw-r--r--
