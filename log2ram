@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source /etc/log2ram.conf
+. /etc/log2ram.conf
 
 HDD_LOG=/var/log.hdd/
 RAM_LOG=/var/log/
