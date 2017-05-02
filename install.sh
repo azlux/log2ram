@@ -16,6 +16,3 @@ then
 else
   echo "You need to be ROOT (sudo can be used)"
 fi
-
-
--rw-r--r--
