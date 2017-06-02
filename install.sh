@@ -12,7 +12,7 @@ then
   cp log2ram.hourly /etc/cron.hourly/log2ram
   chmod +x /etc/cron.hourly/log2ram
 
-  echo "Reboot to activate log2ram"
+  echo "##### Reboot to activate log2ram #####"
 else
   echo "You need to be ROOT (sudo can be used)"
 fi

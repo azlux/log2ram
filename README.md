@@ -14,7 +14,7 @@ cd log2ram
 chmod +x install.sh
 sudo ./install.sh
 ```
-
+**REBOOT** before installing anything else (for example apache2)
 
 ## Customize
 #### variables :
@@ -32,6 +32,8 @@ You can now check the mount folder in ram with (You will see lines with log2ram 
 df -h
 mount
 ```
+
+If you have issue with apache2 , you can try to add `apache2.service` next to other services on the `Before` parameter into /etc/systemd/system/log2ram.service it will solve the pb
 
 The log for log2ram will be write here : `/var/log.hdd/log2ram.log`
 
