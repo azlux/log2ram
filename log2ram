@@ -57,6 +57,12 @@ case "$1" in
   write)
       syncToDisk
       ;;
+	  
+  init)
+      [ -d $HDD_LOG ] || mkdir $HDD_LOG
+      cp -rfup $RAM_LOG -T $HDD_LOG 2>&1 | $LOG_OUTPUT
+	  ;;
+	  
   *)
       echo "Usage: log2ram {start|stop|write}" >&2
       exit 1

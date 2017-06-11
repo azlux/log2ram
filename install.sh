@@ -11,6 +11,7 @@ then
   systemctl enable log2ram
   cp log2ram.hourly /etc/cron.hourly/log2ram
   chmod +x /etc/cron.hourly/log2ram
+  /usr/local/bin/log2ram init
 
   echo "##### Reboot to activate log2ram #####"
 else
