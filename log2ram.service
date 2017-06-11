@@ -1,9 +1,9 @@
 [Unit]
 Description=Log2Ram
 DefaultDependencies=no
-Before=rsyslog.service syslog.target systemd-journald.service sysinit.target shutdown.target
+Before=basic.target rsyslog.service syslog.target systemd-journald.service sysinit.target shutdown.target apache2.service
 After=local-fs.target
-Conflicts=shutdown.target
+Conflicts=shutdown.target reboot.target halt.target
 RequiresMountsFor=/var/log /var/log.hdd
 IgnoreOnIsolate=yes
 
