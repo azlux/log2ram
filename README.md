@@ -18,10 +18,11 @@ sudo ./install.sh
 
 ## Customize
 #### variables :
-Into the file `/etc/log2ram.conf`, there are two variables :
+Into the file `/etc/log2ram.conf`, there are three variables :
 
 - The first variable define the size the log folder will reserve into the RAM.
 - The second variable can be set to `true` if you prefer "rsync" than "cp". I use the command `cp -u` and `rsync -X`, I don't copy the all folder every time for optimization.
+- The last varibale disable the error system mail if there are no enought place on RAM (if set on false)
 
 #### refresh time:
 The default is to write log into the HardDisk every hour. If you think this is too much, you can make the write every day by moving the cron file : `sudo mv /etc/cron.hourly/log2ram /etc/cron.daily/log2ram`.

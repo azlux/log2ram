@@ -29,6 +29,9 @@ syncFromDisk () {
         echo "ERROR: RAM disk too small. Can't sync."
         umount -l $RAM_LOG
         umount -l $HDD_LOG
+		if [ "$MAIL" = true ]; then
+			echo "LOG2RAM : No place on RAM anymore, fallback on the disk" | mail -s 'Log2Ram Error' root;
+		fi
         exit 1
     fi
 
