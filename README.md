@@ -39,3 +39,12 @@ If you have issue with apache2 , you can try to add `apache2.service` next to ot
 The log for log2ram will be write here : `/var/log.hdd/log2ram.log`
 
 ###### Now, muffins for everyone !
+
+
+## Uninstall :(
+(Because sometime we need it)
+```
+cd log2ram
+chmod +x uninstall.sh
+sudo ./uninstall.sh
+```
