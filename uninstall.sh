@@ -6,7 +6,7 @@ then
   systemctl disable log2ram
   rm /etc/systemd/system/log2ram.service
   rm /usr/local/bin/log2ram
-  rm etc/log2ram.conf
+  rm /etc/log2ram.conf
   rm /etc/cron.hourly/log2ram
   echo "##### Reboot isn't needed #####"
 else
