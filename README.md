@@ -1,6 +1,8 @@
 # Log2Ram
 Like ramlog for systemd (on debian 8 jessie for example).
 
+READ THE ISSUE #24 (https://github.com/azlux/log2ram/issues/28) BEFORE INSTALL !
+
 Usefull for **Raspberry** for not writing all the time on the SD card. You need it because your SD card don't want to suffer anymore !
 
 The script [log2ram](https://github.com/azlux/log2ram) can work on every linux system. So you can use it with your own daemon manager if you don't have systemd.
