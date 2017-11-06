@@ -52,7 +52,7 @@ wait_for () {
 case "$1" in
   start)
       [ -d $HDD_LOG/ ] || mkdir $HDD_LOG/
-      rm $LOG2RAM_LOG
+      rm -f $LOG2RAM_LOG
       mount --bind $RAM_LOG/ $HDD_LOG/
       mount --make-private $HDD_LOG/
       wait_for $HDD_LOG
