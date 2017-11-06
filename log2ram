@@ -16,7 +16,7 @@ isSafe () {
 syncToDisk () {
     isSafe
 
-    if [ "$USE_RSYNC" = true ]; then
+    if [ "$USE_RSYNC" == true ]; then
         rsync -aXWv --delete --exclude log2ram.log --links $RAM_LOG/ $HDD_LOG/ 2>&1 | $LOG_OUTPUT
     else
         cp -rfup $RAM_LOG/ -T $HDD_LOG/ 2>&1 | $LOG_OUTPUT
@@ -30,13 +30,13 @@ syncFromDisk () {
         echo "ERROR: RAM disk too small. Can't sync."
         umount -l $RAM_LOG/
         umount -l $HDD_LOG/
-		if [ "$MAIL" = true ]; then
-			echo "LOG2RAM : No place on RAM anymore, fallback on the disk" | mail -s 'Log2Ram Error' root;
-		fi
+	if [ "$MAIL" == true ]; then
+		echo "LOG2RAM : No place on RAM anymore, fallback on the disk" | mail -s 'Log2Ram Error' root;
+	fi
         exit 1
     fi
 
-    if [ "$USE_RSYNC" = true ]; then
+    if [ "$USE_RSYNC" == true ]; then
         rsync -aXWv --delete --exclude log2ram.log --links $HDD_LOG/ $RAM_LOG/ 2>&1 | $LOG_OUTPUT
     else
         cp -rfup $HDD_LOG/ -T $RAM_LOG/ 2>&1 | $LOG_OUTPUT
