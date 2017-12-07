@@ -56,20 +56,36 @@ case "$1" in
       mount --bind $RAM_LOG/ $HDD_LOG/
       mount --make-private $HDD_LOG/
       wait_for $HDD_LOG
+
       rm -f $LOG2RAM_LOG
+
       mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size=$SIZE log2ram $RAM_LOG/
       wait_for $RAM_LOG
+
+      echo "> Starting..." | $LOG_OUTPUT
+
       syncFromDisk
+
+      echo "> Starting: done." | $LOG_OUTPUT
       ;;
 
   stop)
+      echo "> Stopping..." | $LOG_OUTPUT
+
       syncToDisk
+
+      echo "> Stopping: done." | $LOG_OUTPUT
+
       umount -l $RAM_LOG/
       umount -l $HDD_LOG/
       ;;
 
   write)
+      echo "> Writing..." | $LOG_OUTPUT
+
       syncToDisk
+
+      echo "> Writing: done." | $LOG_OUTPUT
       ;;
 
   *)
