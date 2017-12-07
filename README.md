@@ -36,7 +36,7 @@ mount
 
 If you have issue with apache2 , you can try to add `apache2.service` next to other services on the `Before` parameter into /etc/systemd/system/log2ram.service it will solve the pb
 
-The log for log2ram will be write here : `/var/log.hdd/log2ram.log`
+The log for log2ram will be write here : `/var/hdd.log/log2ram.log`
 
 ###### Now, muffins for everyone !
 
