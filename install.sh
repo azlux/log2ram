@@ -12,6 +12,11 @@ then
   cp log2ram.hourly /etc/cron.hourly/log2ram
   chmod +x /etc/cron.hourly/log2ram
 
+  # Remove a previous log2ram version
+  if [ -d /var/log.hdd]; then
+    rm -r /var/log.hdd
+  fi
+
   if [ -d /var/hdd.log ]; then
     rm -r /var/hdd.log
   fi
