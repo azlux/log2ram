@@ -1,0 +1,13 @@
+/var/hdd.log/log2ram.log
+{
+  rotate 7
+  daily
+  missingok
+  notifempty
+  delaycompress
+  compress
+  postrotate
+    log2ram rotate > /dev/null
+  endscript
+}
+

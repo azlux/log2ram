@@ -14,6 +14,8 @@ then
   systemctl enable log2ram
   cp log2ram.hourly /etc/cron.hourly/log2ram
   chmod +x /etc/cron.hourly/log2ram
+  cp log2ram.logrotate /etc/logrotate.d/log2ram
+  chmod 644 /etc/logrotate.d/log2ram
 
   # Remove a previous log2ram version
   if [ -d /var/log.hdd]; then
