@@ -1,5 +1,8 @@
 #!/bin/sh
 
+[ -d /var/hdd.log ] && echo "ERROR: log2ram still installed. Uninstall first!"
+[ -d /var/hdd.log ] && exit 1
+
 if [ `id -u` -eq 0 ]
 then
   cp log2ram.service /etc/systemd/system/log2ram.service
@@ -11,9 +14,14 @@ then
   systemctl enable log2ram
   cp log2ram.hourly /etc/cron.hourly/log2ram
   chmod +x /etc/cron.hourly/log2ram
-  
-  if [ -d /var/log.hdd ]; then
+
+  # Remove a previous log2ram version
+  if [ -d /var/log.hdd]; then
     rm -r /var/log.hdd
+  fi
+
+  if [ -d /var/hdd.log ]; then
+    rm -r /var/hdd.log
   fi
 
   echo "##### Reboot to activate log2ram #####"
