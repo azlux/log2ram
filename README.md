@@ -1,7 +1,7 @@
 # Log2Ram
 Like ramlog for systemd (on debian 8 jessie for example).
 
-Usefull for **Raspberry** for not writing all the time on the SD card. You need it because your SD card don't want to suffer anymore !
+Usefull for **RaspberryPi** for not writing on the SD card all the time. You need it because your SD card doesn't want to suffer anymore!
 
 The script [log2ram](https://github.com/azlux/log2ram) can work on every linux system. So you can use it with your own daemon manager if you don't have systemd.
 
@@ -18,27 +18,27 @@ sudo ./install.sh
 
 ## Customize
 #### variables :
-Into the file `/etc/log2ram.conf`, there are three variables :
+In the file `/etc/log2ram.conf`, there are three variables:
 
-- The first variable define the size the log folder will reserve into the RAM.
-- The second variable can be set to `true` if you prefer "rsync" than "cp". I use the command `cp -u` and `rsync -X`, I don't copy the all folder every time for optimization.
-- The last varibale disable the error system mail if there are no enought place on RAM (if set on false)
+- `SIZE`: defines the size the log folder will reserve into the RAM.
+- `USE_RSYNC`: Can be set to `true` if you prefer "rsync" rather than "cp". I use the command `cp -u` and `rsync -X`, I don't copy the all folder every time for optimization.
+- `MAIL`: Disables the error system mail if there is not enough place on RAM (if set to `false`)
 
 #### refresh time:
-The default is to write log into the HardDisk every hour. If you think this is too much, you can make the write every day by moving the cron file : `sudo mv /etc/cron.hourly/log2ram /etc/cron.daily/log2ram`.
+By default Log2Ram writes to the HardDisk every hour. If you think this is too much, you can make the write every day by moving the cron file to daily: `sudo mv /etc/cron.hourly/log2ram /etc/cron.daily/log2ram`.
 
-### It is working ?
+### It is working?
 You can now check the mount folder in ram with (You will see lines with log2ram if working)
 ```
 df -h
 mount
 ```
 
-If you have issue with apache2 , you can try to add `apache2.service` next to other services on the `Before` parameter into /etc/systemd/system/log2ram.service it will solve the pb
+If you have issue with apache2, you can try to add `apache2.service` next to other services on the `Before` parameter in `/etc/systemd/system/log2ram.service` it will solve the pb
 
-The log for log2ram will be write here : `/var/hdd.log/log2ram.log`
+The log for log2ram will be written at: `/var/hdd.log/log2ram.log`
 
-###### Now, muffins for everyone !
+###### Now, muffins for everyone!
 
 
 ## Uninstall :(
