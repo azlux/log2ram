@@ -6,8 +6,7 @@ HDD_LOG=/var/hdd.log
 RAM_LOG=/var/log
 
 LOG_NAME="log2ram.log"
-LOGROTATE_PATTERN="${LOG_NAME}*"
-LOG2RAM_LOG="${HDD_LOG}/${LOG_NAME}"
+LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}"
 LOG_OUTPUT="tee -a $LOG2RAM_LOG"
 
 isSafe () {
@@ -19,7 +18,7 @@ syncToDisk () {
     isSafe
 
     if [ "$USE_RSYNC" = true ]; then
-        rsync -aXWv --delete --exclude $LOGROTATE_PATTERN --links $RAM_LOG/ $HDD_LOG/ 2>&1 | $LOG_OUTPUT
+        rsync -aXWv --delete --links $RAM_LOG/ $HDD_LOG/ 2>&1 | $LOG_OUTPUT
     else
         cp -rfup $RAM_LOG/ -T $HDD_LOG/ 2>&1 | $LOG_OUTPUT
     fi
@@ -39,7 +38,7 @@ syncFromDisk () {
     fi
 
     if [ "$USE_RSYNC" = true ]; then
-        rsync -aXWv --delete --exclude $LOGROTATE_PATTERN --links $HDD_LOG/ $RAM_LOG/ 2>&1 | $LOG_OUTPUT
+        rsync -aXWv --delete --links $HDD_LOG/ $RAM_LOG/ 2>&1 | $LOG_OUTPUT
     else
         cp -rfup $HDD_LOG/ -T $RAM_LOG/ 2>&1 | $LOG_OUTPUT
     fi
@@ -52,11 +51,6 @@ wait_for () {
 }
 
 case "$1" in
-  clean-rotate)
-      rm -f $HDD_LOG/$LOGROTATE_PATTERN
-      rm -f $RAM_LOG/$LOGROTATE_PATTERN
-      ;;
-
   rotate)
       rm -f $LOG2RAM_LOG
       ;;

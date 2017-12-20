@@ -1,4 +1,4 @@
-/var/hdd.log/log2ram.log
+/var/log/log2ram.log
 {
   rotate 7
   daily
