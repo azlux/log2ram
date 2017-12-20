@@ -16,7 +16,7 @@ then
   chmod +x /etc/cron.hourly/log2ram
 
   # Remove a previous log2ram version
-  if [ -d /var/log.hdd]; then
+  if [ -d /var/log.hdd ]; then
     rm -r /var/log.hdd
   fi
 
