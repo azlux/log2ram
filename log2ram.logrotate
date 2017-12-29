@@ -6,8 +6,5 @@
   notifempty
   delaycompress
   compress
-  postrotate
-    log2ram rotate > /dev/null
-  endscript
 }
 

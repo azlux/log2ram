@@ -51,10 +51,6 @@ wait_for () {
 }
 
 case "$1" in
-  rotate)
-      rm -f $LOG2RAM_LOG
-      ;;
-
   start)
       [ -d $HDD_LOG/ ] || mkdir $HDD_LOG/
       mount --bind $RAM_LOG/ $HDD_LOG/
@@ -76,7 +72,7 @@ case "$1" in
       ;;
 
   *)
-      echo "Usage: log2ram {clean-rotate|rotate|start|stop|write}" >&2
+      echo "Usage: log2ram {start|stop|write}" >&2
       exit 1
       ;;
 esac
