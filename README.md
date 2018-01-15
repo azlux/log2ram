@@ -8,20 +8,20 @@ The script [log2ram](https://github.com/azlux/log2ram) can work on every linux s
 Log2Ram is based on transient log for Systemd here : [A transient /var/log](https://www.debian-administration.org/article/661/A_transient_/var/log)
 
 ## Install
-```
-git clone https://github.com/azlux/log2ram.git
-cd log2ram
-chmod +x install.sh
-sudo ./install.sh
-```
+
+    curl -Lo log2ram.tar.gz https://github.com/azlux/log2ram/archive/master.tar.gz
+    tar xf log2ram.tar.gz
+    cd log2ram-master
+    chmod +x install.sh && sudo ./install.sh
+
 **REBOOT** before installing anything else (for example apache2)
 
 ## Customize
 #### variables :
 In the file `/etc/log2ram.conf`, there are three variables:
 
-- `SIZE`: defines the size the log folder will reserve into the RAM.
-- `USE_RSYNC`: Can be set to `true` if you prefer "rsync" rather than "cp". I use the command `cp -u` and `rsync -X`, I don't copy the all folder every time for optimization.
+- `SIZE`: defines the size the log folder will reserve into the RAM (default is 40M).
+- `USE_RSYNC`: Can be set to `true` if you prefer ´rsync´ rather than ´cp´. I use the command `cp -u` and `rsync -X`, I don't copy the all folder every time for optimization.
 - `MAIL`: Disables the error system mail if there is not enough place on RAM (if set to `false`)
 
 #### refresh time:
@@ -30,8 +30,15 @@ By default Log2Ram writes to the HardDisk every hour. If you think this is too m
 ### It is working?
 You can now check the mount folder in ram with (You will see lines with log2ram if working)
 ```
-df -h
-mount
+# df -h
+…
+log2ram          40M  532K   40M   2% /var/log
+…
+
+# mount
+…
+log2ram on /var/log type tmpfs (rw,nosuid,nodev,noexec,relatime,size=40960k,mode=755)
+…
 ```
 
 If you have issue with apache2, you can try to add `apache2.service` next to other services on the `Before` parameter in `/etc/systemd/system/log2ram.service` it will solve the pb
