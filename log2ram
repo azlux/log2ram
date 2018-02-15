@@ -27,7 +27,7 @@ syncToDisk () {
 syncFromDisk () {
     isSafe
 
-    if [ ! -z `du -sh -t $SIZE $HDD_LOG/ | cut -f1` ]; then
+    if [ ! -z "$(du -sh -t "$SIZE" $HDD_LOG/ | cut -f1)" ]; then
         echo "ERROR: RAM disk too small. Can't sync."
         umount -l $RAM_LOG/
         umount -l $HDD_LOG/
@@ -45,7 +45,7 @@ syncFromDisk () {
 }
 
 wait_for () {
-    while ! grep -qs $1 /proc/mounts; do
+    while ! grep -qs "$1" /proc/mounts; do
         sleep 0.1
     done
 }
@@ -56,7 +56,7 @@ case "$1" in
       mount --bind $RAM_LOG/ $HDD_LOG/
       mount --make-private $HDD_LOG/
       wait_for $HDD_LOG
-      mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size=$SIZE log2ram $RAM_LOG/
+      mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size="$SIZE" log2ram $RAM_LOG/
       wait_for $RAM_LOG
       syncFromDisk
       ;;

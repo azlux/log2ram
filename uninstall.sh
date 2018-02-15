@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ `id -u` -eq 0 ]
+if [ $(id -u) -eq 0 ]
 then
   service log2ram stop
   systemctl disable log2ram
