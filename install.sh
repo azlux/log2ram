@@ -16,6 +16,7 @@ then
   chmod +x /etc/cron.hourly/log2ram
   cp log2ram.logrotate /etc/logrotate.d/log2ram
   chmod 644 /etc/logrotate.d/log2ram
+  cp uninstall.sh /usr/local/bin/uninstall-log2ram.sh
 
   # Remove a previous log2ram version
   if [ -d /var/log.hdd ]; then

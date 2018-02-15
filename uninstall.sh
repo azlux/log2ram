@@ -13,7 +13,8 @@ then
   if [ -d /var/hdd.log ]; then
     rm -r /var/hdd.log
   fi
-
+  echo "Log2Ram is uninstalled, removing the uninstaller in progress"
+  rm /usr/local/bin/uninstall-log2ram.sh
   echo "##### Reboot isn't needed #####"
 else
   echo "You need to be ROOT (sudo can be used)"
