@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 . /etc/log2ram.conf
 

@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 [ -d /var/hdd.log ] && echo "ERROR: log2ram still installed. Uninstall first!"
 [ -d /var/hdd.log ] && exit 1
 
-if [ $(id -u) -eq 0 ]
+if [ "$(id -u)" -eq 0 ]
 then
   cp log2ram.service /etc/systemd/system/log2ram.service
   chmod 644 /etc/systemd/system/log2ram.service
