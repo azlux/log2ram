@@ -12,7 +12,8 @@ Log2Ram is based on transient log for Systemd here : [A transient /var/log](http
     curl -Lo log2ram.tar.gz https://github.com/azlux/log2ram/archive/master.tar.gz
     tar xf log2ram.tar.gz
     cd log2ram-master
-    chmod +x log2ram-master/install.sh && sudo log2ram-master/install.sh
+    chmod +x install.sh && sudo install.sh
+    cd ..
     rm -r log2ram-master
 
 **REBOOT** before installing anything else (for example apache2)
