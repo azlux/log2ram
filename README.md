@@ -7,6 +7,14 @@ The script [log2ram](https://github.com/azlux/log2ram) can work on every linux s
 
 Log2Ram is based on transient log for Systemd here : [A transient /var/log](https://www.debian-administration.org/article/661/A_transient_/var/log)
 
+_____
+## Menu
+1. [Install](#install)
+2. [Upgrade](#upgrade)
+3. [Customize](#customize)
+4. [It is working ?](#it-is-working)
+5. [Uninstall](#uninstall-)
+
 ## Install
 
     curl -Lo log2ram.tar.gz https://github.com/azlux/log2ram/archive/master.tar.gz
@@ -17,6 +25,9 @@ Log2Ram is based on transient log for Systemd here : [A transient /var/log](http
     rm -r log2ram-master
 
 **REBOOT** before installing anything else (for example apache2)
+## Upgrade
+
+You need to stop log2ram (`service log2ram stop`) and start the [install](#install).
 
 ## Customize
 #### variables :
