@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-[ -d /var/hdd.log ] && echo "ERROR: log2ram still installed. Uninstall first!"
-[ -d /var/hdd.log ] && exit 1
+systemctl -q is-active log2ram  && { echo "ERROR: log2ram service is still running. Please run \"sudo service log2ram stop\" to stop it."; exit 1; }
+
 
 if [ "$(id -u)" -eq 0 ]
 then
