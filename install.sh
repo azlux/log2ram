@@ -5,6 +5,7 @@ systemctl -q is-active log2ram  && { echo "ERROR: log2ram service is still runni
 
 if [ "$(id -u)" -eq 0 ]
 then
+  [ -d /usr/local/bin/ ] || mkdir /usr/local/bin/
   cp log2ram.service /etc/systemd/system/log2ram.service
   chmod 644 /etc/systemd/system/log2ram.service
   cp log2ram /usr/local/bin/log2ram
