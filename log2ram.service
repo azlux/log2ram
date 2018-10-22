@@ -1,13 +1,19 @@
 [Unit]
 Description=Log2Ram
-Before=syslog.target mysql.service fail2ban.service nginx.service rsyslog.service
+DefaultDependencies=no
+Before=basic.target rsyslog.service syslog.target systemd-journald.service sysinit.target shutdown.target apache2.service
+After=local-fs.target
+Conflicts=shutdown.target reboot.target halt.target
+RequiresMountsFor=/var/log /var/hdd.log
+IgnoreOnIsolate=yes
 
 [Service]
 Type=oneshot
 ExecStart= /usr/local/bin/log2ram start
 ExecStop= /usr/local/bin/log2ram stop
 ExecReload= /usr/local/bin/log2ram write
+TimeoutStartSec=120
 RemainAfterExit=yes
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=sysinit.target

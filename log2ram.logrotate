@@ -1,0 +1,10 @@
+/var/log/log2ram.log
+{
+  rotate 7
+  daily
+  missingok
+  notifempty
+  delaycompress
+  compress
+}
+

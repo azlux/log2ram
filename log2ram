@@ -1,60 +1,76 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
-SIZE=40M
-USE_RSYNC=false
+. /etc/log2ram.conf
 
-# don't touch anything below here.
+HDD_LOG=/var/hdd.log
+RAM_LOG=/var/log
 
-HDD_LOG=/var/log.hdd/
-RAM_LOG=/var/log/
-LOG2RAM_LOG="${HDD_LOG}log2ram.log"
+LOG_NAME="log2ram.log"
+LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}"
 LOG_OUTPUT="tee -a $LOG2RAM_LOG"
 
 isSafe () {
-    [ -d $HDD_LOG ] || echo "ERROR: $HDD_LOG doesn't exist!  Can't sync."
-    [ -d $HDD_LOG ] || exit 1
+    [ -d $HDD_LOG/ ] || echo "ERROR: $HDD_LOG/ doesn't exist! Can't sync."
+    [ -d $HDD_LOG/ ] || exit 1
 }
 
 syncToDisk () {
     isSafe
 
     if [ "$USE_RSYNC" = true ]; then
-        rsync -aXWv --delete --exclude log2ram.log --links $RAM_LOG $HDD_LOG 2>&1 | $LOG_OUTPUT
+        rsync -aXWv --delete --links $RAM_LOG/ $HDD_LOG/ 2>&1 | $LOG_OUTPUT
     else
-        cp -rfup $RAM_LOG -T $HDD_LOG 2>&1 | $LOG_OUTPUT
+        cp -rfup $RAM_LOG/ -T $HDD_LOG/ 2>&1 | $LOG_OUTPUT
     fi
 }
 
 syncFromDisk () {
     isSafe
 
+    if [ ! -z "$(du -sh -t "$SIZE" $HDD_LOG/ | cut -f1)" ]; then
+        echo "ERROR: RAM disk too small. Can't sync."
+        umount -l $RAM_LOG/
+        umount -l $HDD_LOG/
+        if [ "$MAIL" = true ]; then
+            echo "LOG2RAM : No place on RAM anymore, fallback on the disk" | mail -s 'Log2Ram Error' root;
+        fi
+        exit 1
+    fi
+
     if [ "$USE_RSYNC" = true ]; then
-        rsync -aXWv --delete --exclude log2ram.log --links $HDD_LOG $RAM_LOG 2>&1 | $LOG_OUTPUT
+        rsync -aXWv --delete --links $HDD_LOG/ $RAM_LOG/ 2>&1 | $LOG_OUTPUT
     else
-        cp -rfup $HDD_LOG -T $RAM_LOG 2>&1 | $LOG_OUTPUT
+        cp -rfup $HDD_LOG/ -T $RAM_LOG/ 2>&1 | $LOG_OUTPUT
     fi
 }
 
+wait_for () {
+    while ! grep -qs "$1" /proc/mounts; do
+        sleep 0.1
+    done
+}
 
 case "$1" in
   start)
-      [ -d $HDD_LOG ] || mkdir $HDD_LOG
-      rm $LOG2RAM_LOG
-      mount --bind $RAM_LOG $HDD_LOG
-      mount --make-private $HDD_LOG
-      mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size=$SIZE log2ram $RAM_LOG
+      [ -d $HDD_LOG/ ] || mkdir $HDD_LOG/
+      mount --bind $RAM_LOG/ $HDD_LOG/
+      mount --make-private $HDD_LOG/
+      wait_for $HDD_LOG
+      mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size="$SIZE" log2ram $RAM_LOG/
+      wait_for $RAM_LOG
       syncFromDisk
       ;;
 
   stop)
       syncToDisk
-      umount -l $RAM_LOG
-      umount -l $HDD_LOG
+      umount -l $RAM_LOG/
+      umount -l $HDD_LOG/
       ;;
 
   write)
       syncToDisk
       ;;
+
   *)
       echo "Usage: log2ram {start|stop|write}" >&2
       exit 1
