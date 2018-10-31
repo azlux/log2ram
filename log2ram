@@ -20,7 +20,19 @@ syncToDisk () {
     if [ "$USE_RSYNC" = true ]; then
         rsync -aXWv --delete --links $RAM_LOG/ $HDD_LOG/ 2>&1 | $LOG_OUTPUT
     else
-        cp -rfup $RAM_LOG/ -T $HDD_LOG/ 2>&1 | $LOG_OUTPUT
+		if [ "$USE_PATCH" = true ]; then 
+			for entry in $(ls -t $RAM_LOG/)
+			do			
+				if [ ! -f "$HDD_LOG/$entry" ]; then
+					cat $RAM_LOG/$entry >> $HDD_LOG/$entry
+					echo /dev/null > $RAM_LOG/$entry
+				else
+					cp -rfup $RAM_LOG/$entry -T $HDD_LOG/ 2>&1 | $LOG_OUTPUT
+				fi
+			done
+		else
+			cp -rfup $RAM_LOG/ -T $HDD_LOG/ 2>&1 | $LOG_OUTPUT
+		fi
     fi
 }
 
