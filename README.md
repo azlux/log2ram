@@ -1,5 +1,5 @@
-# Log2Ram
-Like ramlog for systemd (on debian 8 jessie for example).
+# Log2ZRam
+Like Log2Ram but uses Zram as backing store
 
 Usefull for **RaspberryPi** for not writing on the SD card all the time. You need it because your SD card doesn't want to suffer anymore!
 
