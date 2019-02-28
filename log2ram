@@ -5,42 +5,48 @@ RAM_LOG=/var/log
 LOG_NAME="log2ram.log" 
 LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}" 
 LOG_OUTPUT="tee -a $LOG2RAM_LOG" 
-BIG_CORES=$((BIG_CORES+1))
-if modinfo zram | grep -q 'zram_num_devices:' 2>/dev/null; then
-  MODPROBE_ARGS="zram_num_devices=${BIG_CORES}" 
-elif 
-  modinfo zram | grep -q ' num_devices:' 2>/dev/null; then
-  MODPROBE_ARGS="num_devices=${BIG_CORES}" 
-else
-  exit 1 
-fi 
-modprobe zram $MODPROBE_ARGS
-BIG_CORES=$((BIG_CORES-1))
-# Calculate memory to use for zram (1/2 of ram)
-totalmem=$(free|awk '/^Mem:/{print $2}')
-mem=$((( totalmem * MEM_FACTOR / 100 / BIG_CORES ) * 1024))
- 
-# initialize the devices
-for i in $(seq ${BIG_CORES}); do
-  DEVNUMBER=$((i - 1))
-  echo ${COMP_ALG} > /sys/block/zram${DEVNUMBER}/comp_algorithm
-  echo ${mem} > /sys/block/zram${DEVNUMBER}/disksize
-  mkswap /dev/zram${DEVNUMBER}
-  swapon -p 75 /dev/zram${DEVNUMBER} 
-done 
 
-echo ${COMP_ALG} > /sys/block/zram${BIG_CORES}/comp_algorithm 
-echo ${SIZE_BYTES} > /sys/block/zram${BIG_CORES}/disksize 
-mkfs.ext4 /dev/zram${BIG_CORES}   
+mountZram () { 
+if [ ! -f /dev/zram0 ]; then
+	if [ "$ZLTG" = true ]; then
+		zram_num_devices=$((BIG_CORES+1))
+	fi
+	if modinfo zram | grep -q 'zram_num_devices:' 2>/dev/null; then
+		MODPROBE_ARGS="zram_num_devices=${zram_num_devices}"
+	elif
+		modinfo zram | grep -q ' num_devices:' 2>/dev/null; then
+		MODPROBE_ARGS="num_devices=${zram_num_devices}"
+	else
+		exit 1
+	fi
+	modprobe zram $MODPROBE_ARGS
+	# Calculate memory to use for zram (1/2 of ram)
+	totalmem=$(free|awk '/^Mem:/{print $2}')
+	mem=$((( totalmem * MEM_FACTOR / 100 / BIG_CORES ) * 1024))
+ 
+	# initialize the devices
+	for i in $(seq ${BIG_CORES}); do
+		DEVNUMBER=$((i - 1))
+		echo ${COMP_ALG} > /sys/block/zram${DEVNUMBER}/comp_algorithm
+		echo ${mem} > /sys/block/zram${DEVNUMBER}/disksize
+		mkswap /dev/zram${DEVNUMBER}
+		swapon -p ${SWAP_PRI} /dev/zram${DEVNUMBER}
+	done
+	SIZE=$((SIZE * 1024 * 1024))
+	if [ "$ZLTG" = true ]; then
+		echo ${COMP_ALG} > /sys/block/zram${BIG_CORES}/comp_algorithm
+		echo ${SIZE} > /sys/block/zram${BIG_CORES}/disksize
+		mkfs.ext4 /dev/zram${BIG_CORES}
+	fi
+fi
+}
 
 isSafe () {
     [ -d $HDD_LOG/ ] || echo "ERROR: $HDD_LOG/ doesn't exist! Can't sync."
     [ -d $HDD_LOG/ ] || exit 1
  }
-
 syncToDisk () {
     isSafe
-
     if [ "$USE_RSYNC" = true ]; then
         rsync -aXWv --delete --links $RAM_LOG/ $HDD_LOG/ 2>&1 | $LOG_OUTPUT
     else
@@ -58,7 +64,6 @@ syncFromDisk () {
         fi
         exit 1
     fi
-
     if [ "$USE_RSYNC" = true ]; then
         rsync -aXWv --delete --links $HDD_LOG/ $RAM_LOG/ 2>&1 | $LOG_OUTPUT
     else
@@ -72,11 +77,18 @@ wait_for () {
  }
 case "$1" in
   start)
+	  if [ "$BIG_CORES" > 0 ]; then
+		mountZram
+	  fi
       [ -d $HDD_LOG/ ] || mkdir $HDD_LOG/
       mount --bind $RAM_LOG/ $HDD_LOG/
       mount --make-private $HDD_LOG/
       wait_for $HDD_LOG
-      mount -t ext4 -o nosuid,noexec,nodev,user=log2ram /dev/zram$BIG_CORES $RAM_LOG/
+      if [ "$ZLTG" = true ]; then
+      	mount -t ext4 -o nosuid,noexec,nodev,user=log2ram /dev/zram$BIG_CORES $RAM_LOG/
+      else
+      	mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size="$SIZE" log2ram $RAM_LOG/
+      fi
       wait_for $RAM_LOG
       syncFromDisk
       ;;
@@ -91,6 +103,4 @@ case "$1" in
   *)
       echo "Usage: log2ram {start|stop|write}" >&2
       exit 1
-      ;;
-esac
-
+      ;; esac
