@@ -9,6 +9,7 @@ Little script running cat /proc/loadavg every ten secs on MagicMirror initialisa
 
 PiZero should be a good yard stick as it has little precious cpu power to spare.
 LZ0 would seem to be better than without LZ4 is approx the same as without.
+Might be a different story with more cpu to spare as LZ4 may provide a better option then.
 
 Hack here for 3rd sheet with LZ4 /usr/bin/init-zram-swapping
 ```
