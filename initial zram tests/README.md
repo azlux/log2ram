@@ -5,8 +5,8 @@ First sheet no zram
 3rd sheet hacked zram-config_0.5_all.deb .5* freem mem LZ4
 
 Running MagicMirror2 with quick 15sec page rotations using standard modules + MMM-News to create some I/O
-Little script running cat /proc/loadavg every ten secs on MagicMirror initialisation.
-loadav1.ods contains results.
+Little script running cat /proc/loadavg every ten secs from MagicMirror initialisation onwards approx 25 mins.
+loadav1.ods contains results for a PiZero its just a real world that a Pi0 might be used for..
 
 PiZero should be a good yard stick as it has little precious cpu power to spare.
 LZ0 would seem to be better than without LZ4 is approx the same as without.
