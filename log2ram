@@ -37,7 +37,6 @@ if [ ! -f /dev/zram0 ]; then
 		echo ${COMP_ALG} > /sys/block/zram${BIG_CORES}/comp_algorithm
 		echo ${SIZE} > /sys/block/zram${BIG_CORES}/disksize
 		mke2fs -t ext4 -O ^has_journal,extent,^uninit_bg,dir_nlink,extra_isize /dev/zram${BIG_CORES}
-		tune2fs -o journal_data_writeback /dev/zram${BIG_CORES}
 	fi
 fi
 }
