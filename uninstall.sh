@@ -11,6 +11,7 @@ then
   rm /etc/logrotate.d/log2ram
 
   if [ -d /var/hdd.log ]; then
+    umount /var/hdd.log
     rm -r /var/hdd.log
   fi
   echo "Log2Ram is uninstalled, removing the uninstaller in progress"
