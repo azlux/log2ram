@@ -20,7 +20,7 @@ if [ ! -f /dev/zram0 ]; then
 		exit 1
 	fi
 	modprobe zram $MODPROBE_ARGS
-	# Calculate memory to use for zram (1/2 of ram)
+	# Calculate memory to use for zram 
 	totalmem=$(free|awk '/^Mem:/{print $2}')
 	mem=$((( totalmem * MEM_FACTOR / 100 / BIG_CORES ) * 1024))
  
@@ -32,6 +32,7 @@ if [ ! -f /dev/zram0 ]; then
 		mkswap /dev/zram${DEVNUMBER}
 		swapon -p ${SWAP_PRI} /dev/zram${DEVNUMBER}
 	done
+	#Add log2ram zram drive
 	SIZE=$((SIZE * 1024 * 1024))
 	if [ "$ZLTG" = true ]; then
 		echo ${COMP_ALG} > /sys/block/zram${BIG_CORES}/comp_algorithm
