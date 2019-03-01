@@ -37,7 +37,8 @@ if [ ! -f /dev/zram0 ]; then
 	if [ "$ZL2R" = true ]; then
 		echo ${COMP_ALG} > /sys/block/zram${BIG_CORES}/comp_algorithm
 		echo ${SIZE} > /sys/block/zram${BIG_CORES}/disksize
-		mke2fs -t ext4 -O ^has_journal,extent,^uninit_bg,dir_nlink,extra_isize /dev/zram${BIG_CORES}
+		mke2fs -t ext4 -O ^has_journal,extent,^uninit_bg /dev/zram${BIG_CORES}
+		tune2fs -o journal_data_writeback  /dev/zram${BIG_CORES}
 	fi
 fi
 }
@@ -94,7 +95,7 @@ case "$1" in
       mount --make-private $HDD_LOG/
       wait_for $HDD_LOG
       if [ "$ZLTG" = true ]; then
-      	mount -t ext4 -o nosuid,noexec,nodev,user=log2ram /dev/zram$BIG_CORES $RAM_LOG/
+       	mount -t ext4 -o nosuid,noexec,nodev,user=log2ram,data=writeback,noatime,nodiratime /dev/zram$BIG_CORES $RAM_LOG/
       else
       	mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size="$SIZE" log2ram $RAM_LOG/
       fi
