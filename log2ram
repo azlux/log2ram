@@ -93,7 +93,7 @@ case "$1" in
       mount --make-private $HDD_LOG/
       wait_for $HDD_LOG
       if [ "$ZLTG" = true ]; then
-      	mount -t ext4 -o nosuid,noexec,nodev,mode=0755, user=log2ram /dev/zram$BIG_CORES $RAM_LOG/
+      	mount -t ext4 -o nosuid,noexec,nodev,user=log2ram /dev/zram$BIG_CORES $RAM_LOG/
       else
       	mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size="$SIZE" log2ram $RAM_LOG/
       fi
