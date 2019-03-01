@@ -8,7 +8,7 @@ LOG_OUTPUT="tee -a $LOG2RAM_LOG"
 
 mountZram () { 
 if [ ! -f /dev/zram0 ]; then
-	if [ "$ZLTG" = true ]; then
+	if [ "$ZL2R" = true ]; then
 		zram_num_devices=$((BIG_CORES+1))
 	fi
 	if modinfo zram | grep -q 'zram_num_devices:' 2>/dev/null; then
@@ -34,7 +34,7 @@ if [ ! -f /dev/zram0 ]; then
 	done
 	#Add log2ram zram drive
 	SIZE=$((SIZE * 1024 * 1024))
-	if [ "$ZLTG" = true ]; then
+	if [ "$ZL2R" = true ]; then
 		echo ${COMP_ALG} > /sys/block/zram${BIG_CORES}/comp_algorithm
 		echo ${SIZE} > /sys/block/zram${BIG_CORES}/disksize
 		mke2fs -t ext4 -O ^has_journal,extent,^uninit_bg,dir_nlink,extra_isize /dev/zram${BIG_CORES}
