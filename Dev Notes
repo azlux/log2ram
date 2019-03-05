@@ -1,0 +1,23 @@
+# The main factor for sys_admins is mem_limit that is that actual memory footprint. 
+# Disk_size is purely the virtual uncompressed of the comp_alg and becomes a strange question.
+# If you hit comp gold then why limit this as mem_limit controls physical mem usage and with log drives also doesn't include the large overhead of super/blocks...
+#
+# Max steams is always set to CPU core count and maybe in some architecture you would wish to give a priority to big-cores or exclude little-cores.
+# It doesn't exist so its prob as pointless as creating multiple devices as all that does is create smaller partitions if the mem_alg dvision by num_devices is used
+#
+# By default, the Linux kernel swaps in 8 pages of memory at a time. When using ZRAM, the incremental cost of reading 1 page at a time is negligible
+# and may help in case the device is under extreme memory pressure.
+# echo "0" /proc/sys/vm/page-cluster
+# This prob should be optional as effects overall /sys/vm prob call it TWEAK_PAGE_CLUSTER
+#
+# Much of the rest of the Zram kernal documentation https://www.kernel.org/doc/Documentation/blockdev/zram.txt is generally a confusion but mostly,
+# confusion over implementation and benefit.
+# The above are maybe not apparent but for me its a single device controlled by mem_limit
+#
+# The only other consideration is initialistaion and to check no previous service has loaded the zram module by checking '/sys/class/zram-control' exists
+# If ! then create /dev/zram0 and then precede to use the hot_plug system at cat /sys/class/zram-control/hot_add
+#
+# Also any /proc/crypto alg can be used but only lzo/lz4 have zramctl test strings so all others display as blank.
+# If non existant or null is supplied for comp_alg then lzo will be used so if zramctl shows a blank comp_alg and you results come in as expected its likely
+# comp_alg choice was sucessful.
+
