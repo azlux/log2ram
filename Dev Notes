@@ -55,7 +55,8 @@
 # if you like to tweak performance than all those are available and not locked in script.
 # All you need to do is set:-
 # ZLTG flag means use ZRAM ramdisk for log2ram true=enable / false=disable
-# ZL2R=true means a compressed drive for /var/log with minimal flash wear
+# ZLTG=false means it will use tmpfs
+# ZL2R=true means a compressed zram (deflate) drive for /var/log with minimal flash wear
 # SWAP_DEVICES=0 Disables zram swaps
 # SWAP_DEVICES=1 as there is zero point of multiple smaller swap partitions when each device has multiple streams
 # Thats it as go with the defaults otherwise tweak to your desire
