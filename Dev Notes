@@ -46,7 +46,7 @@
 # As overall long term your loadav due to better zram swap mechanism will prob drop 20% with vm_swappiness of 80 - 100
 # At extreme load with zram as log2ram sets things might garner a couple of percent such as boot anything less than 70 seems to make no difference.
 #
-# vm_swappiness in conjubction with zram can have 20% benfits and also at extreme load be just as detrimental.
+# vm_swappiness in conjunction with zram can have 20% benfits and also at extreme load be just as detrimental.
 # the static nature of vm_swappiness means its always a comphremise for all situations on a dynamic system.
 # so log2ram will run a schedule check current load and shift vm_swappiness from 70 - 100 dynamically to get the best operation for the current situation.
 # Its a simple cron job and should really help minimise comphremise loss and vm_swappiness does not need to be set as log2ram if zram is enabled.
