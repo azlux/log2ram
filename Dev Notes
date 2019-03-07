@@ -29,7 +29,7 @@
 # https://www.lzop.org/lzop_man.php
 # https://manpages.debian.org/stretch/liblz4-tool/lz4.1.en.html
 # Grab a decent file size compress & uncompress in a loop and see which has the best optimisation for your distro.
-# Or just monitor cat /proc/loadavg with zram running as time has much but actual load is better
+# Or just monitor cat /proc/loadavg with zram running as timed operation shows much, but actual load is better
 #
 # Synthetic tests
 # sudo apt-get install stress stress-ng stress-ng has better metrics but seems harsher on process and would sometimes seem to cause crashes.
