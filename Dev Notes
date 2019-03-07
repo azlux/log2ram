@@ -50,7 +50,8 @@
 # the static nature of vm_swappiness means its always a comphremise for all situations on a dynamic system.
 # so log2ram will run a schedule check current load and shift vm_swappiness from 70 - 100 dynamically to get the best operation for the current situation.
 # Its a simple cron job and should really help minimise comphremise loss and vm_swappiness does not need to be set as log2ram if zram is enabled.
-# Will apply optimised vm_swappiness dynamically
+# Will apply optimised vm_swappiness dynamically at boot vm_swappiness = 70 and as load decreases it wil rise.
+# The sheduler is constant so dynmic allocation of vm_swappiness = 70 will continue until package is removed
 # PS apols for all the /etc/log2ram.conf settings and for most uses the default settings will work great
 # if you like to tweak performance than all those are available and not locked in script.
 # All you need to do is set:-
