@@ -9,6 +9,9 @@ then
   rm /etc/log2ram.conf
   rm /etc/cron.hourly/log2ram
   rm /etc/logrotate.d/log2ram
+  sh uninstall-crontab.sh
+  rm /usr/local/bin/uninstall-crontab.sh
+  rm /usr/local/bin/crontab.sh
 
   if [ -d /var/hdd.log ]; then
     rm -r /var/hdd.log
