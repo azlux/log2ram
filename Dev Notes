@@ -19,5 +19,43 @@
 #
 # Also any /proc/crypto alg can be used but only lzo/lz4 have zramctl test strings so all others display as blank.
 # If non existant or null is supplied for comp_alg then lzo will be used so if zramctl shows a blank comp_alg and you results come in as expected its likely
-# comp_alg choice was sucessful.
+# comp_alg choice was sucessful. You can pretty much guarantee lzo/lz4/deflate and deflate might not be the latest or greatest its likely to exist and fit
+# purpose for log compression.
+# LZ4 without doubt is the best alg for zram but from testing it would seem LZO often has better compiler optimistaion and you could see them swap places in choice
+# of preference
+#
+# How to test
+# sudo apt-get install lzop liblz4-tool
+# https://www.lzop.org/lzop_man.php
+# https://manpages.debian.org/stretch/liblz4-tool/lz4.1.en.html
+# Grab a decent file size compress & uncompress in a loop and see which has the best optimisation for your distro.
+# Or just monitor cat /proc/loadavg with zram running as time has much but actual load is better
+#
+# Synthetic tests
+# sudo apt-get install stress stress-ng stress-ng has better metrics but seems harsher on process and would sometimes seem to cause crashes.
+#
+# stress-ng has --metrics stress does not
+# stress --vm 2 --vm-bytes 128M --timeout 60s
+# The --vm 2 will start N workers (2 workers) continuously calling mmap/munmap and writing to the allocated memory.
+# Note that this can cause systems to trip the kernel OOM killer on Linux systems if not enough physical memory and swap is not available
+# Give it a test -vm n for various workers making sure --vm-bytes * -vm n doesn't exceed total memory
+#
+# Zram is an amazing option but it adds load, the load is minimal but at points of high stress any further load is a problem.
+#
+# By dropping disk based swap you can employ the advantages of that by upping the vm_swappiness from 60 to 80 which gives a balance
+# As overall long term your loadav due to better zram swap mechanism will prob drop 20% with vm_swappiness of 80 - 100
+# At extreme load with zram as log2ram sets things might garner a couple of percent such as boot anything less than 70 seems to make no difference.
+#
+# vm_swappiness in conjubction with zram can have 20% benfits and also at extreme load be just as detrimental.
+# the static nature of vm_swappiness means its always a comphremise for all situations on a dynamic system.
+# so log2ram will run a schedule check current load and shift vm_swappiness from 70 - 100 dynamically to get the best operation for the current situation.
+# Its a simple cron job and should really help minimise comphremise loss.
+# PS apols for all the /etc/log2ram.conf settings and for most uses the default settings will work great
+# if you like to tweak performance than all those are available and not locked in script.
+# All you need to do is set:-
+# ZLTG flag means use ZRAM ramdisk for log2ram true=enable / false=disable
+# ZL2R=true means a compressed drive for /var/log with minimal flash wear
+# SWAP_DEVICES=0 Disables zram swaps
+# SWAP_DEVICES=1 as there is zero point of multiple smaller swap partitions when each device has multiple streams
+# Thats it as go with the defaults otherwise tweak to your desire
 
