@@ -56,7 +56,7 @@
 # All you need to do is set:-
 # ZLTG flag means use ZRAM ramdisk for log2ram true=enable / false=disable
 # ZLTG=false means it will use tmpfs
-# ZL2R=true means a compressed zram (deflate) drive for /var/log with minimal flash wear
+# ZL2R=true means a compressed zram (deflate) drive for /var/log with minimal flash wear on low frequency write to disk ob boot/ shutdown and when nearing full
 # SWAP_DEVICES=0 Disables zram swaps
 # SWAP_DEVICES=1 as there is zero point of multiple smaller swap partitions when each device has multiple streams
 # Thats it as go with the defaults otherwise tweak to your desire
