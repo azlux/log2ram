@@ -16,62 +16,62 @@ esac
 load_factor=0
 load_fetch
 get_load_factor
-echo ${load_factor}
+
 sleep .2
 load_fetch
 get_load_factor
-echo ${load_factor}
+
 
 if [ ${load_factor} -eq 0 ]; then
-	sysctl vm.swappiness=70
+	sysctl vm.swappiness=70 2>1 > /dev/null
 elif [ ${load_factor} -eq 4 ]; then
 	current_swapiness=$( cat /proc/sys/vm/swappiness )
 	if [ ${current_swapiness} -lt 96 ]; then
-		sysctl vm.swappiness=$(( current_swapiness + 5 ))
+		sysctl vm.swappiness=$(( current_swapiness + 5 )) 2>1 > /dev/null
 	fi
 else
-	sysctl vm.swappiness=80
+	sysctl vm.swappiness=80 2>1 > /dev/null
 fi
-cat /proc/sys/vm/swappiness
+
 sleep 20
 load_factor=0
 load_fetch
 get_load_factor
-echo ${load_factor}
+
 sleep .2
 load_fetch
 get_load_factor
-echo ${load_factor}
+
 
 if [ ${load_factor} -eq 0 ]; then
-        sysctl vm.swappiness=70
+        sysctl vm.swappiness=70 2>1 > /dev/null
 elif [ ${load_factor} -eq 4 ]; then
         current_swapiness=$( cat /proc/sys/vm/swappiness )
         if [ ${current_swapiness} -lt 96 ]; then
-                sysctl vm.swappiness=$(( current_swapiness + 5 ))
+                sysctl vm.swappiness=$(( current_swapiness + 5 )) 2>1 > /dev/null
         fi
 else
-	sysctl vm.swappiness=80
+	sysctl vm.swappiness=80 2>1 > /dev/null
 fi
-cat /proc/sys/vm/swappiness
+
 sleep 20
 load_factor=0
 load_fetch
 get_load_factor
-echo ${load_factor}
+
 sleep .2
 load_fetch
 get_load_factor
-echo ${load_factor}
+
 
 if [ ${load_factor} -eq 0 ]; then
-        sysctl vm.swappiness=70
+        sysctl vm.swappiness=70 2>1 > /dev/null
 elif [ ${load_factor} -eq 4 ]; then
         current_swapiness=$( cat /proc/sys/vm/swappiness )
         if [ ${current_swapiness} -lt 96 ]; then
-                sysctl vm.swappiness=$(( current_swapiness + 5 ))
+                sysctl vm.swappiness=$(( current_swapiness + 5 )) 2>1 > /dev/null
         fi
 else
-	sysctl vm.swappiness=80
+	sysctl vm.swappiness=80 2>1 > /dev/null
 fi
-cat /proc/sys/vm/swappiness
+
