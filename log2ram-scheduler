@@ -1,4 +1,5 @@
 #!/bin/bash
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH
 load_fetch() {
 set -- $(cat /proc/loadavg)
 load1=$1
