@@ -2,10 +2,10 @@
 Description=Log2Ram
 DefaultDependencies=no
 Before=basic.target rsyslog.service syslog.target systemd-journald.service sysinit.target shutdown.target apache2.service
-After=local-fs.target zram-swap-config.target
+After=local-fs.target
 Conflicts=shutdown.target reboot.target halt.target
 RequiresMountsFor=/var/log /var/hdd.log
-#IgnoreOnIsolate=yes
+IgnoreOnIsolate=yes
 
 [Service]
 Type=oneshot
