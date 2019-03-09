@@ -52,7 +52,7 @@ wait_for () {
 
 createZramLogDrive () {
 	# Check Zram Class created
-	if [ ! -d '/sys/class/zram-control' ]; then
+	if [ ! -d "/sys/class/zram-control" ]; then
 		modprobe zram
 		RAM_DEV='0'
 	else
