@@ -69,11 +69,9 @@ case "$1" in
       [ -d $HDD_LOG/ ] || mkdir $HDD_LOG/
       mount --bind $RAM_LOG/ $HDD_LOG/
       mount --make-private $HDD_LOG/
-	if [ "$ZL2R" = true ]; then
-		createZramLogDrive
-	fi
       wait_for $HDD_LOG
 	if [ "$ZL2R" = true ]; then
+		createZramLogDrive
 		mount -t ext4 -o nosuid,noexec,nodev,user=log2ram /dev/zram${RAM_DEV} ${RAM_LOG}/
 	else
 		mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size=${SIZE} log2ram $RAM_LOG/
