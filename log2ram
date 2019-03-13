@@ -64,6 +64,36 @@ createZramLogDrive () {
 	mke2fs -t ext4 /dev/zram${RAM_DEV}
 }
 
+getUsage () {
+	if [ "$ZL2R" = true ]; then
+		USAGE=$(zramctl -b | grep /var/log | awk '{ print $5 }')
+	else
+		USAGE=$(df "/var/log" | tail -1 | awk '{ print $3 }')
+	fi
+}
+
+toBytes() {
+ echo $1 | echo $((`sed 's/.*/\L\0/;s/t/Xg/;s/g/Xm/;s/m/Xk/;s/k/X/;s/b//;s/X/ *1024/g'`))
+}
+
+pruneOldLog() {
+	isSafe
+	getUsage
+	PRUNE_BYTES=$(toBytes ${PRUNE_LEVEL})
+	MEM_SIZE=$(toBytes ${SIZE})
+	LOG_REMAINING=$(( ${MEM_SIZE} - ${USAGE} ))
+	if [ "$LOG_REMAINING" -lt "$PRUNE_BYTES" ];then
+	    if [ "$USE_RSYNC" = true ]; then
+			rsync -aXWv --delete --links $RAM_LOG/oldlog/ $HDD_LOG/oldlog/ 2>&1 | $LOG_OUTPUT
+			rm -rf $RAM_LOG/oldlog/ 2>&1 | $LOG_OUTPUT
+		else
+			cp -rfup $RAM_LOG/oldlog/ -T $HDD_LOG/oldlog/ 2>&1 | $LOG_OUTPUT
+			rm -rf $RAM_LOG/oldlog/ 2>&1 | $LOG_OUTPUT
+		fi
+	fi
+	
+}
+
 case "$1" in
   start)
       [ -d $HDD_LOG/ ] || mkdir $HDD_LOG/
@@ -91,7 +121,8 @@ case "$1" in
       ;;
 
   write)
-      syncToDisk
+	pruneOldLog
+      #syncToDisk
       ;;
 
   *)

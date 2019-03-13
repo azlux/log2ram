@@ -4,11 +4,12 @@ systemctl -q is-active log2ram  && { echo "ERROR: log2ram service is still runni
 [ "$(id -u)" -eq 0 ] || { echo "You need to be ROOT (sudo can be used)"; exit 1; }
 
 # log2ram
-mkdir -p /usr/local/bin/
+mkdir -p /usr/local/bin/log2ram
 install -m 644 log2ram.service /etc/systemd/system/log2ram.service
-install -m 755 log2ram /usr/local/bin/log2ram
+install -m 755 log2ram /usr/local/bin/log2ram/log2ram
 install -m 644 log2ram.conf /etc/log2ram.conf
-install -m 644 uninstall.sh /usr/local/bin/uninstall-log2ram.sh
+install -m 644 log2ram.conf /usr/local/bin/log2ram/log2ram-lastcheck
+install -m 644 uninstall.sh /usr/local/bin/log2ram/uninstall-log2ram.sh
 systemctl enable log2ram
 
 # cron
@@ -16,10 +17,26 @@ install -m 755 log2ram.hourly /etc/cron.hourly/log2ram
 install -m 644 log2ram.logrotate /etc/logrotate.d/log2ram
 
 # Remove a previous log2ram version
-  rm -rf /var/log.hdd
+# ??
+#  rm -rf /var/log.hdd
 
 # Make sure we start clean
 rm -rf /var/hdd.log
+# Make backup of pruned logs
+mkdir -p /var/oldlog
 
-echo "#####         Reboot to activate log2ram         #####"
-echo "##### edit /etc/log2ram.conf to configure options ####"
+cp -rfup /var/log/*.1 /var/oldlog/
+cp -rfup /var/log/*.gz /var/oldlog/
+cp -rfup /var/log/*.old /var/oldlog/
+# Prune logs
+rm -r /var/log/*.1
+rm -r /var/log/*.gz
+rm -r /var/log/*.old
+# Clone /var/log
+mkdir -p /var/hdd.log
+mkdir -p /var/log/oldlog
+cp -rfup /var/log/ -T /var/hdd.log/
+sed -i '/^include.*/i olddir /var/log/oldlog' /etc/logrotate.conf
+
+echo "#####         Reboot to activate log2ram          #####"
+echo "##### edit /etc/log2ram.conf to configure options #####"
