@@ -59,7 +59,7 @@ log2ram on /var/log type tmpfs (rw,nosuid,nodev,noexec,relatime,size=40960k,mode
 ```
 sudo service log2ram reload
 ```
-calls the remaining size and PRUNE_LEVEL < available free space will move and clean /var/log/oldlog
+Checks PRUNE_LEVEL < available free space if true will move and clean /var/log/oldlog to hdd.log
 ```
 sudo logrotate -vf /etc/logrotate.conf
 ```
@@ -88,3 +88,4 @@ The log for log2ram will be written at: `/var/log/log2ram.log`
 ```
 chmod +x /usr/local/bin/uninstall-log2ram.sh && sudo /usr/local/bin/uninstall-log2ram.sh
 ```
+Also /var/oldlog contains the pruned logs from install delete if not required (prob not)
