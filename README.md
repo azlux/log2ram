@@ -55,6 +55,15 @@ log2ram          40M  532K   40M   2% /var/log
 log2ram on /var/log type tmpfs (rw,nosuid,nodev,noexec,relatime,size=40960k,mode=755)
 …
 ```
+### Testing
+```
+sudo service log2ram reload
+```
+calls the remaining size and PRUNE_LEVEL < available free space will move and clean /var/log/oldlog
+```
+sudo logrotate -vf /etc/logrotate.conf
+```
+Force the daily logrotate with verbose output
 
 If you have issue with apache2, you can try to add `apache2.service` next to other services on the `Before` parameter in `/etc/systemd/system/log2ram.service` it will solve the pb
 
