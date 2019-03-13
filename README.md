@@ -60,6 +60,17 @@ If you have issue with apache2, you can try to add `apache2.service` next to oth
 
 The log for log2ram will be written at: `/var/log/log2ram.log`
 
+| Compressor name	     | Ratio	| Compression | Decompress. |
+|------------------------|----------|-------------|-------------|
+|zstd 1.3.4 -1	         | 2.877	| 470 MB/s	  | 1380 MB/s   |
+|zlib 1.2.11 -1	         | 2.743    | 110 MB/s    | 400 MB/s    |
+|brotli 1.0.2 -0	     | 2.701	| 410 MB/s	  | 430 MB/s    |
+|quicklz 1.5.0 -1	     | 2.238	| 550 MB/s	  | 710 MB/s    |
+|lzo1x 2.09 -1	         | 2.108	| 650 MB/s	  | 830 MB/s    |
+|lz4 1.8.1	             | 2.101    | 750 MB/s    | 3700 MB/s   |
+|snappy 1.1.4	         | 2.091	| 530 MB/s	  | 1800 MB/s   |
+|lzf 3.6 -1	             | 2.077	| 400 MB/s	  | 860 MB/s    |
+
 ###### Now, muffins for everyone!
 
 

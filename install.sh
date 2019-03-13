@@ -21,4 +21,5 @@ install -m 644 log2ram.logrotate /etc/logrotate.d/log2ram
 # Make sure we start clean
 rm -rf /var/hdd.log
 
-echo "##### Reboot to activate log2ram #####"
+echo "#####         Reboot to activate log2ram         #####"
+echo "##### edit /etc/log2ram.conf to configure options ####"
