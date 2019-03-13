@@ -38,9 +38,10 @@ In the file `/etc/log2ram.conf`, there are three variables:
 - `SIZE`: defines the size the log folder will reserve into the RAM (default is 40M).
 - `USE_RSYNC`: Can be set to `true` if you prefer ´rsync´ rather than ´cp´. I use the command `cp -u` and `rsync -X`, I don't copy the all folder every time for optimization.
 - `MAIL`: Disables the error system mail if there is not enough place on RAM (if set to `false`)
+- `ZL2R`: Enable zram compatibility (`false` by default). Check the comment on the config file. See https://github.com/StuartIanNaylor/zram-swap-config to configure a zram space on your raspberry before enable this option.
 
 #### refresh time:
-By default Log2Ram writes to the HardDisk every hour. If you think this is too much, you can make the write every day by moving the cron file to daily: `sudo mv /etc/cron.hourly/log2ram /etc/cron.daily/log2ram`.
+By default Log2Ram writes to the HardDisk every hour. If you think this is too much, you can make the write every day by moving the cron file to daily: `sudo mv /etc/cron.hourly/log2ram.hourly /etc/cron.daily/log2ram.daily`.
 
 ### It is working?
 You can now check the mount folder in ram with (You will see lines with log2ram if working)
@@ -59,6 +60,8 @@ log2ram on /var/log type tmpfs (rw,nosuid,nodev,noexec,relatime,size=40960k,mode
 If you have issue with apache2, you can try to add `apache2.service` next to other services on the `Before` parameter in `/etc/systemd/system/log2ram.service` it will solve the pb
 
 The log for log2ram will be written at: `/var/log/log2ram.log`
+
+Compressor for zram. Usefull for the `COMP_ALG` of ZRAM on the config file.
 
 | Compressor name	     | Ratio	| Compression | Decompress. |
 |------------------------|----------|-------------|-------------|
