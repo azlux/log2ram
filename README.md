@@ -55,6 +55,15 @@ log2ram          40M  532K   40M   2% /var/log
 log2ram on /var/log type tmpfs (rw,nosuid,nodev,noexec,relatime,size=40960k,mode=755)
 …
 ```
+### Testing
+```
+sudo service log2ram reload
+```
+Checks PRUNE_LEVEL < available free space if true will move and clean /var/log/oldlog to hdd.log
+```
+sudo logrotate -vf /etc/logrotate.conf
+```
+Force the daily logrotate with verbose output
 
 If you have issue with apache2, you can try to add `apache2.service` next to other services on the `Before` parameter in `/etc/systemd/system/log2ram.service` it will solve the pb
 
@@ -79,3 +88,4 @@ The log for log2ram will be written at: `/var/log/log2ram.log`
 ```
 chmod +x /usr/local/bin/uninstall-log2ram.sh && sudo /usr/local/bin/uninstall-log2ram.sh
 ```
+Also /var/oldlog contains the pruned logs from install delete if not required (prob not)
