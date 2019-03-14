@@ -25,5 +25,22 @@ rm -rf /var/hdd.log
 # Make backup of pruned logs
 mkdir -p /var/oldlog
 
+cp -rfup /var/log/*.1 /var/oldlog/
+cp -rfup /var/log/*.gz /var/oldlog/
+cp -rfup /var/log/*.old /var/oldlog/
+# Prune logs
+rm -r /var/log/*.1
+rm -r /var/log/*.gz
+rm -r /var/log/*.old
+# Clone /var/log
+mkdir -p /var/hdd.log
+mkdir -p /var/log/oldlog
+cp -rfup /var/log/ -T /var/hdd.log/
+sed -i '/^include.*/i olddir /var/log/oldlog' /etc/logrotate.conf
+
+echo "#####         Reboot to activate log2ram          #####"
+=======
+echo "#####          Reboot to activate log2ram         #####"
+
 
 echo "##### edit /etc/log2ram.conf to configure options #####"

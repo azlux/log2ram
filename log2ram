@@ -85,10 +85,10 @@ pruneOldLog() {
 	if [ "$LOG_REMAINING" -lt "$PRUNE_BYTES" ];then
 	    if [ "$USE_RSYNC" = true ]; then
 			rsync -aXWv --delete --links $RAM_LOG/oldlog/ $HDD_LOG/oldlog/ 2>&1 | $LOG_OUTPUT
-			rm -rf $RAM_LOG/oldlog/ 2>&1 | $LOG_OUTPUT
+			rm -rf $RAM_LOG/oldlog/* 2>&1 | $LOG_OUTPUT
 		else
 			cp -rfup $RAM_LOG/oldlog/ -T $HDD_LOG/oldlog/ 2>&1 | $LOG_OUTPUT
-			rm -rf $RAM_LOG/oldlog/ 2>&1 | $LOG_OUTPUT
+			rm -rf $RAM_LOG/oldlog/* 2>&1 | $LOG_OUTPUT
 		fi
 	fi
 	
