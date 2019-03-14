@@ -35,7 +35,9 @@ rm -r /var/log/*.old
 # Clone /var/log
 mkdir -p /var/hdd.log
 mkdir -p /var/log/oldlog
-cp -rfup /var/log/ -T /var/hdd.log/
+# Prob better to use xcopy here with a --exclude
+rsync -a --exclude 'oldlog' /var/log/ /var/hdd.log/
+#cp -rfup /var/log/ -T /var/hdd.log/
 sed -i '/^include.*/i olddir /var/log/oldlog' /etc/logrotate.conf
 
 echo "#####          Reboot to activate log2ram         #####"
