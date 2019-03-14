@@ -38,8 +38,6 @@ mkdir -p /var/log/oldlog
 cp -rfup /var/log/ -T /var/hdd.log/
 sed -i '/^include.*/i olddir /var/log/oldlog' /etc/logrotate.conf
 
-echo "#####         Reboot to activate log2ram          #####"
-=======
 echo "#####          Reboot to activate log2ram         #####"
 
 
