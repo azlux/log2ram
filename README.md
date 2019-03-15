@@ -33,8 +33,6 @@ In the file `/etc/log2zram.conf` sudo nano /etc/log2zram.conf to edit:
 # The default is 20M and is basically enough for minimal applications.
 # Because aplications can often vary in logging frequency this may have to be tweaked to suit application .
 SIZE=20M
-# ZL2R Zram Log 2 Ram enables a zram drive when ZL2R=true ZL2R=false is mem only tmpfs
-ZL2R=true
 # COMP_ALG this is any compression algorithm listed in /proc/crypto
 # lz4 is fastest with lightest load but deflate (zlib) and Zstandard (zstd) give far better compression ratios
 # lzo is very close to lz4 and may with some binaries have better optimisation
