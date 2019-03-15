@@ -50,7 +50,7 @@ LOG_DISK_SIZE=60M
 # In normal operation hitting 50% or above can take many hourly cycles so a higher prune level is a balance
 # 55-60% is probably a good level as too high will restart logrotation and create less history  
 PRUNE_LEVEL=60
-``
+```
 
 #### refresh time:
 By default Log2Zram checks available log space every hour. It them makes a comparison of the percentage set via Prune_Level and only writes out old logs to disk when triggered and then removes the collected old logs from zram space.
