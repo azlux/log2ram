@@ -17,7 +17,7 @@ _____
 5. [Uninstall](#uninstall-)
 
 ## Install
-    sudo apt-get install git
+    sudo apt-get install git rsync
     git clone https://github.com/StuartIanNaylor/log2zram
     cd log2zram
     sudo sh install.sh
