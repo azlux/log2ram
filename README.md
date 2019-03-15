@@ -1,9 +1,12 @@
 # Log2Zram
 
 Usefull for IoD / maker projects for reducing SD, Nand and Emmc block wear via log operations.
-Use Zram to minimise precious memory footprint
+Uses Zram to minimise precious memory footprint and extremely infrequent write outs.
 
 Log2Zam is a lower write fork https://github.com/azlux/log2ram based on transient log for Systemd here : [A transient /var/log](https://www.debian-administration.org/article/661/A_transient_/var/log)
+
+Can not be used for mission critical logging applications where a system crash and log loss is unaceptable.
+If the extremely unlikely event of a system crash is not a major concern then L2Z can massively reduce log block wear whilst maintinaing and extremely tiny memory footprint.
 
 _____
 ## Menu
