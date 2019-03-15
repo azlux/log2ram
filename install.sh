@@ -14,7 +14,7 @@ systemctl enable log2zram
 
 # cron
 install -m 755 log2zram.hourly /etc/cron.hourly/log2zram
-install -m 644 log2zram.logrotate /etc/logrotate.d/logz2ram
+install -m 644 log2zram.logrotate /etc/logrotate.d/log2zram
 
 # Make sure we start clean
 rm -rf /var/hdd.log
@@ -32,9 +32,9 @@ rm -r /var/log/*.old
 mkdir -p /var/hdd.log
 mkdir -p /var/log/oldlog
 # Prob better to use xcopy here with a --exclude
-rsync -a --exclude 'oldlog' /var/log/ /var/hdd.log/
-#cp -rfup /var/log/ -T /var/hdd.log/
+rsync -arzh --exclude 'oldlog' /var/log/ /var/hdd.log/
+mkdir -p /var/hdd.log/oldlog
 sed -i '/^include.*/i olddir /var/log/oldlog' /etc/logrotate.conf
 
 echo "#####          Reboot to activate log2ram         #####"
-echo "##### edit /etc/log2ram.conf to configure options #####"
+echo "##### edit /etc/log2zram.conf to configure options #####"
