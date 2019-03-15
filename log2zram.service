@@ -1,5 +1,5 @@
 [Unit]
-Description=Log2Ram
+Description=Log2Zram
 DefaultDependencies=no
 Before=basic.target rsyslog.service syslog.target systemd-journald.service sysinit.target shutdown.target zram-swap-conf.service apache2.service
 After=local-fs.target
@@ -9,9 +9,9 @@ IgnoreOnIsolate=yes
 
 [Service]
 Type=oneshot
-ExecStart= /usr/local/bin/log2ram/log2ram start
-ExecStop= /usr/local/bin/log2ram/log2ram stop
-ExecReload= /usr/local/bin/log2ram/log2ram write
+ExecStart= /usr/local/bin/log2zram/log2zram start
+ExecStop= /usr/local/bin/log2zram/log2zram stop
+ExecReload= /usr/local/bin/log2zram/log2zram write
 TimeoutStartSec=120
 RemainAfterExit=yes
 

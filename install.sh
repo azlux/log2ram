@@ -1,24 +1,20 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
-systemctl -q is-active log2ram  && { echo "ERROR: log2ram service is still running. Please run \"sudo service log2ram stop\" to stop it."; exit 1; }
+systemctl -q is-active log2zram  && { echo "ERROR: log2zram service is still running. Please run \"sudo service log2zram stop\" to stop it and uninstall"; exit 1; }
 [ "$(id -u)" -eq 0 ] || { echo "You need to be ROOT (sudo can be used)"; exit 1; }
 
 # log2ram
-mkdir -p /usr/local/bin/log2ram
-install -m 644 log2ram.service /etc/systemd/system/log2ram.service
-install -m 755 log2ram /usr/local/bin/log2ram/log2ram
-install -m 644 log2ram.conf /etc/log2ram.conf
-install -m 644 log2ram.conf /usr/local/bin/log2ram/log2ram-lastcheck
-install -m 644 uninstall.sh /usr/local/bin/log2ram/uninstall-log2ram.sh
-systemctl enable log2ram
+mkdir -p /usr/local/bin/log2zram
+install -m 644 log2zram.service /etc/systemd/system/log2zram.service
+install -m 755 log2zram /usr/local/bin/log2zram/log2zram
+install -m 644 log2zram.conf /etc/log2zram.conf
+install -m 644 log2zram.log /usr/local/bin/log2zram/log2zram.log
+install -m 644 uninstall.sh /usr/local/bin/log2zram/uninstall.sh
+systemctl enable log2zram
 
 # cron
-install -m 755 log2ram.hourly /etc/cron.hourly/log2ram
-install -m 644 log2ram.logrotate /etc/logrotate.d/log2ram
-
-# Remove a previous log2ram version
-# ??
-#  rm -rf /var/log.hdd
+install -m 755 log2zram.hourly /etc/cron.hourly/log2zram
+install -m 644 log2zram.logrotate /etc/logrotate.d/logz2ram
 
 # Make sure we start clean
 rm -rf /var/hdd.log
@@ -41,6 +37,4 @@ rsync -a --exclude 'oldlog' /var/log/ /var/hdd.log/
 sed -i '/^include.*/i olddir /var/log/oldlog' /etc/logrotate.conf
 
 echo "#####          Reboot to activate log2ram         #####"
-
-
 echo "##### edit /etc/log2ram.conf to configure options #####"
