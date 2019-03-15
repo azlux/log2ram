@@ -92,7 +92,7 @@ The log for log2ram will be written at: `/var/log/log2ram.log`
 |lzf 3.6 -1	             | 2.077	| 400 MB/s	  | 860 MB/s    |
 
 
-## Uninstall :(
+## Uninstall
 ```
 chmod +x /usr/local/bin/uninstall-log2ram.sh && sudo /usr/local/bin/uninstall-log2ram.sh
 ```
