@@ -26,9 +26,6 @@ _____
 #### variables :
 In the file `/etc/log2zram.conf` sudo nano /etc/log2zram.conf to edit:
 ```
-# Configuration file for Log2Ram (https://github.com/azlux/log2ram) under MIT license.
-# This configuration file is read by the log2ram service
-
 # Size for the zram memory used, it defines the mem_limit for the zram device.
 # The default is 20M and is basically enough for minimal applications.
 # Because aplications can often vary in logging frequency this may have to be tweaked to suit application .
