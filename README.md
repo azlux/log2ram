@@ -72,11 +72,8 @@ The log for log2ram will be written at: `/var/log/log2ram.log`
 |snappy 1.1.4	         | 2.091	| 530 MB/s	  | 1800 MB/s   |
 |lzf 3.6 -1	             | 2.077	| 400 MB/s	  | 860 MB/s    |
 
-###### Now, muffins for everyone!
-
 
 ## Uninstall :(
-(Because sometime we need it)
 ```
 chmod +x /usr/local/bin/uninstall-log2ram.sh && sudo /usr/local/bin/uninstall-log2ram.sh
 ```
