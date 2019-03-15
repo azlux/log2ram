@@ -18,17 +18,10 @@ _____
 
 ## Install
 
-    curl -Lo log2ram.tar.gz https://github.com/azlux/log2ram/archive/master.tar.gz
-    tar xf log2ram.tar.gz
-    cd log2ram-master
-    chmod +x install.sh && sudo ./install.sh
-    cd ..
-    rm -r log2ram-master
-
-**REBOOT** before installing anything else (for example apache2)
-## Upgrade
-
-You need to stop log2ram (`service log2ram stop`) and start the [install](#install).
+    git clone https://github.com/StuartIanNaylor/log2zram
+    cd log2zram
+    sudo sh install.sh
+    
 
 ## Customize
 #### variables :
