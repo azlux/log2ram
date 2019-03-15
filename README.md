@@ -1,13 +1,9 @@
-# Log2Ram
-Like ramlog for systemd (on debian 8 jessie for example).
+# Log2Zram
 
-Usefull for **RaspberryPi** for not writing on the SD card all the time. You need it because your SD card doesn't want to suffer anymore!
+Usefull for IoD / maker projects for reducing SD, Nand and Emmc block wear via log operations.
+Use Zram to minimise precious memory footprint
 
-Explanations: The script creates a `/var/log` mount point in RAM. So any writing of the log to the `/var/log` folder will not actually be written to disk (in this case to the sd card for a raspberry card) but directly to RAM. By default, every hour, the CRON will launch a synchronization of the RAM to the folder located on the physical disk. The script will also make this copy of RAM to disk in case of machine shutdown (but cannot do it in case of power failure). This way you avoid excessive writing on the SD card.
-
-The script [log2ram](https://github.com/azlux/log2ram) can work on every linux system. So you can use it with your own daemon manager if you don't have systemd.
-
-Log2Ram is based on transient log for Systemd here : [A transient /var/log](https://www.debian-administration.org/article/661/A_transient_/var/log)
+Log2Zam is a lower write fork https://github.com/azlux/log2ram based on transient log for Systemd here : [A transient /var/log](https://www.debian-administration.org/article/661/A_transient_/var/log)
 
 _____
 ## Menu
