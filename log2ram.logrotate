@@ -1,3 +1,19 @@
+# These settings will save the rotated logfiles to a seperate location.
+# This file needs to be located in /etc/logrotate.d.
+# The "00" prefix in the file name is required to ensure this file is
+# loaded before any program specific logrotate settings are loaded as
+# contents of /etc/logrotate.d are read in alphabetical order.
+
+# The path & name for rotated logfiles folder.
+olddir /var/log.old
+
+# Create the path if it doesn't exist
+createolddir 755 root root
+
+# To allow the files to be "moved" (ie copied and original deleted)
+# to another device/partition (eg out of RAM)
+renamecopy
+
 /var/log/log2ram.log
 {
   rotate 7
@@ -7,4 +23,3 @@
   delaycompress
   compress
 }
-
