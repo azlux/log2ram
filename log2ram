@@ -82,6 +82,7 @@ case "$1" in
 
   stop)
       syncToDisk
+	  invoke-rc.d rsyslog stop
       umount -l $RAM_LOG/
       umount -l $HDD_LOG/
 	  if [ "$ZL2R" = true ]; then
@@ -93,6 +94,8 @@ case "$1" in
 			echo "$RAM_DEV" > /sys/class/zram-control/hot_remove
 		fi
 	  fi
+	  invoke-rc.d rsyslog restart
+	  journalctl --flush
 	  ;;
 
   write)
