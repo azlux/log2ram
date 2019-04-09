@@ -83,15 +83,16 @@ case "$1" in
   stop)
       syncToDisk
 	  invoke-rc.d rsyslog stop
+	  L2G_DEV=$(df /var/log | tail -1 | awk '{ print $1 }' | tr -dc '0-9')
       umount -l $RAM_LOG/
       umount -l $HDD_LOG/
 	  if [ "$ZL2R" = true ]; then
 		RAM_DEV=$(cat /sys/class/zram-control/hot_add)
 		if [ "$RAM_DEV" -eq "1" ];then
+			echo "$L2G_DEV" > /sys/class/zram-control/hot_remove
 			rmod zram
-		else
-			RAM_DEV=$(df /var/log | tail -1 | awk '{ print $1 }' | tr -dc '0-9')
-			echo "$RAM_DEV" > /sys/class/zram-control/hot_remove
+		else			
+			echo "$L2G_DEV" > /sys/class/zram-control/hot_remove
 		fi
 	  fi
 	  invoke-rc.d rsyslog restart
