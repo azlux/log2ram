@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -x
+
 . ./log2ram.conf
 
 isLogFolderSizeEnough () {
@@ -25,7 +25,7 @@ assertSufficientSpace () {
         while true; do
             read -p "$RAM_LOG is too big to continue. Would you like to delete it? [Y/n]: " yn
             case $yn in
-                [Yy]* ) rm -rf $RAM_LOG; break;;
+                [Yy]* ) sudo rm -rf $RAM_LOG; break;;
                 [Nn]* ) exit 1;;
                 * ) echo "Please answer yes or no.";;
                 esac
