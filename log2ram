@@ -2,9 +2,6 @@
 
 . /etc/log2ram.conf
 
-HDD_LOG=/var/hdd.log
-RAM_LOG=/var/log
-
 LOG_NAME="log2ram.log"
 LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}"
 LOG_OUTPUT="tee -a $LOG2RAM_LOG"
