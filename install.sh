@@ -12,11 +12,11 @@ install -m 644 uninstall.sh /usr/local/bin/uninstall-log2ram.sh
 systemctl enable log2ram
 
 # cron
-install -m 755 log2ram.hourly /etc/cron.hourly/log2ram
+install -m 755 log2ram.cron /etc/cron.daily/log2ram
 install -m 644 log2ram.logrotate /etc/logrotate.d/log2ram
 
 # Remove a previous log2ram version
-  rm -rf /var/log.hdd
+rm -rf /var/log.hdd
 
 # Make sure we start clean
 rm -rf /var/hdd.log

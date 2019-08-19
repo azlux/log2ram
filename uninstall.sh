@@ -7,7 +7,7 @@ then
   rm /etc/systemd/system/log2ram.service
   rm /usr/local/bin/log2ram
   rm /etc/log2ram.conf
-  rm /etc/cron.hourly/log2ram
+  rm /etc/cron.daily/log2ram
   rm /etc/logrotate.d/log2ram
 
   if [ -d /var/hdd.log ]; then
