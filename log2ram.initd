@@ -24,7 +24,7 @@ stop() {
   eend $?
 }
 
-reload() {
+restart() {
   ebegin "Syncing logs to disk"
     /usr/local/bin/log2ram write
   eend $?
