@@ -1,5 +1,5 @@
 # Log2Ram
-Like ramlog for systemd (on debian 8 jessie for example). adapted to detect OpenRC when running on Gentoo-Linux (Hopefully)
+Like ramlog for systemd (on debian 8 jessie for example). Adapted to detect OpenRC init-system when running on Gentoo-Linux (Hopefully). For now only Systemd and OpenRC can be handled.
 
 Usefull for **RaspberryPi** for not writing on the SD card all the time. You need it because your SD card doesn't want to suffer anymore!
 
