@@ -5,8 +5,6 @@
 
 description="Store logfiles in RAM to mimimize writes to disk."
 
-. /etc/log2ram.conf  # Include configuration of log2ram
-
 depend() {
   need localmount
   before logger
