@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+rc-service log2ram restart
