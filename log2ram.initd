@@ -3,7 +3,7 @@
 # Init-Skript for log2ram
 # This skript is designed to work on Gentoo Linux with OpenRC
 
-description="Store logfiles in RAM to mimimize writes to disk."
+description="Store logfiles in RAM to minimize writes to disk."
 
 depend() {
   need localmount
