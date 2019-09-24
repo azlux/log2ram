@@ -19,7 +19,7 @@ case "$INIT" in
   ;;
 esac
 
-echo "installing files for ${INIT}..."
+echo "Installing log2ram for $INIT init-system"
 # log2ram
 mkdir -p /usr/local/bin/
 install -m 755 log2ram /usr/local/bin/log2ram
