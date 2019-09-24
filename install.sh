@@ -3,10 +3,10 @@
 [ "$(id -u)" -eq 0 ] || { echo "You need to be ROOT (sudo can be used)"; exit 1; }
 
 # See if we can find out the init-system
-echo "Try to detect init..."
-if [ "$(systemctl --version)" != '' ] ; then
+echo "Try to detect init and running log2ram service..."
+if [ "$(systemctl --version 2> /dev/null)" != '' ] ; then
   INIT='systemd'
-elif [ "$(rc-service --version)" != '' ] ; then
+elif [ "$(rc-service --version 2> /dev/null)" != '' ] ; then
   INIT='openrc'
 fi
 
