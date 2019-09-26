@@ -8,7 +8,7 @@ RAM_LOG=/var/log
 LOG_NAME="log2ram.log"
 LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}"
 LOG_OUTPUT="tee -a $LOG2RAM_LOG"
-printf -v NOW '%(%F %H:%M:%S)T' -1  # Actual Date and Time
+printf -v NOW '%(%F %H:%M:%S)T' -1  # Actual date and time
 
 isSafe () {
     [ -d $HDD_LOG/ ] || echo "ERROR: $HDD_LOG/ doesn't exist! Can't sync."
@@ -18,7 +18,7 @@ isSafe () {
 syncToDisk () {
     isSafe
 
-    echo "$NOW - Syncing to disk" | $LOG_OUTPUT
+    echo "==> $NOW - Syncing to disk" >> $LOG2RAM_LOG
     if [ "$USE_RSYNC" = true ]; then
         rsync -aXv --inplace --no-whole-file --delete-after $RAM_LOG/ $HDD_LOG/ 2>&1 | $LOG_OUTPUT
     else
@@ -39,7 +39,7 @@ syncFromDisk () {
         exit 1
     fi
 
-    echo "$NOW - Syncing from disk" | $LOG_OUTPUT
+    echo "==> $NOW - Syncing from disk" >> $LOG2RAM_LOG
     if [ "$USE_RSYNC" = true ]; then
         rsync -aXv --inplace --no-whole-file --delete-after $HDD_LOG/ $RAM_LOG/ 2>&1 | $LOG_OUTPUT
     else
