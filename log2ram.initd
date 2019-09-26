@@ -5,6 +5,9 @@
 
 description="Store logfiles in RAM to minimize writes to disk."
 
+# Command is available when the service is started
+extra_started_commands="write"
+
 depend() {
   need localmount
   before logger
@@ -22,7 +25,7 @@ stop() {
   eend $?
 }
 
-restart() {
+write() {
   ebegin "Syncing logs to disk"
     /usr/local/bin/log2ram write
   eend $?
