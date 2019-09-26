@@ -9,7 +9,7 @@ description="Store logfiles in RAM to minimize writes to disk."
 extra_started_commands="write"
 
 depend() {
-  need localmount
+  after localmount
   before logger
 }
   
