@@ -8,7 +8,7 @@ RAM_LOG=/var/log
 LOG_NAME="log2ram.log"
 LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}"
 LOG_OUTPUT="tee -a $LOG2RAM_LOG"
-printf -v NOW '%(%F %H:%M:%S)T' -1  # Actual date and time
+printf -v NOW '%(%F %H:%M:%S)T' -1 || NOW=$(date '+%F %H:%M:%S')  # Actual date and time (date as fallback)
 
 isSafe () {
     [ -d $HDD_LOG/ ] || echo "ERROR: $HDD_LOG/ doesn't exist! Can't sync."
