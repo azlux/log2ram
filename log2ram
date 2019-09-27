@@ -29,7 +29,7 @@ syncFromDisk () {
     isSafe
 
     if [ -n "$(du -sh -t "$SIZE" $HDD_LOG/ | cut -f1)" ]; then
-        echo 'ERROR: RAM disk too small. Can\'t sync.'
+        echo "ERROR: RAM disk too small. Can't sync."
         umount -l $RAM_LOG/
         umount -l $HDD_LOG/
         if [ "$MAIL" = true ]; then
