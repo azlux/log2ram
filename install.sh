@@ -14,7 +14,7 @@ case "$INIT" in
   systemd)
     systemctl -q is-active log2ram  && { echo 'ERROR: log2ram service is still running. Please run "sudo service log2ram stop" to stop it.' ; exit 1 ; } ;;
   openrc)
-    rc-service log2ram status 2>1 >/dev/null  && { echo 'ERROR: log2ram service is still running. Please run "sudo rc-service log2ram stop" to stop it.' ; exit 1 ; } ;;
+    rc-service log2ram status >/dev/null 2>&1  && { echo 'ERROR: log2ram service is still running. Please run "sudo rc-service log2ram stop" to stop it.' ; exit 1 ; } ;;
   *) echo 'ERROR: could not detect init-system' ; exit 1
   ;;
 esac
