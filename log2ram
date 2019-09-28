@@ -2,8 +2,8 @@
 
 . /etc/log2ram.conf
 
-HDD_LOG=/var/hdd.log
-RAM_LOG=/var/log
+HDD_LOG='/var/hdd.log'
+RAM_LOG='/var/log'
 
 LOG_NAME='log2ram.log'
 LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}"
@@ -56,13 +56,13 @@ createZramLogDrive () {
 	# Check Zram Class created
 	if [ ! -d '/sys/class/zram-control' ]; then
 		modprobe zram
-		RAM_DEV='0'
+		RAM_DEV=0
 	else
-		RAM_DEV=$(cat /sys/class/zram-control/hot_add)
+		RAM_DEV="$(cat /sys/class/zram-control/hot_add)"
 	fi
-	echo "${COMP_ALG}" > "/sys/block/zram${RAM_DEV}/comp_algorithm"
-	echo "${LOG_DISK_SIZE}" > "/sys/block/zram${RAM_DEV}/disksize"
-	echo "${SIZE}" > "/sys/block/zram${RAM_DEV}/mem_limit"
+	echo "$COMP_ALG" > "/sys/block/zram${RAM_DEV}/comp_algorithm"
+	echo "$LOG_DISK_SIZE" > "/sys/block/zram${RAM_DEV}/disksize"
+	echo "$SIZE" > "/sys/block/zram${RAM_DEV}/mem_limit"
 	mke2fs -t ext4 "/dev/zram${RAM_DEV}"
 }
 
@@ -97,7 +97,7 @@ case "$1" in
       ;;
 
   *)
-      echo "Usage: log2ram {start|stop|write}" >&2
+      echo 'Usage: log2ram {start|stop|write}' >&2
       exit 1
       ;;
 esac
