@@ -29,7 +29,7 @@ _____
 **REBOOT** before installing anything else (for example apache2)
 ## Upgrade
 
-You need to stop log2ram (`service log2ram stop`) and start the [install](#install).
+You need to stop log2ram (`service log2ram stop` with systemd or `rc-service log2ram stop` with OpenRC) and start the [install](#install).
 
 ## Customize
 #### variables :
