@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 
-[ "$(id -u)" -eq 0 ] || { echo 'You need to be ROOT (sudo can be used)' ; exit 1 ; }
+[ "$(id -u)" -eq 0 ] || { echo 'You need to be ROOT (sudo can be used)' ; exit 1 ;}
+
+. /log2ram.conf  # Include config to check if size is enought (See below) 
 
 # See if we can find out the init-system
 echo 'Try to detect init and running log2ram service...'
@@ -12,9 +14,9 @@ fi
 
 case "$INIT" in
   systemd)
-    systemctl -q is-active log2ram  && { echo 'ERROR: log2ram service is still running. Please run "sudo service log2ram stop" to stop it.' ; exit 1 ; } ;;
+    systemctl -q is-active log2ram  && { echo 'ERROR: log2ram service is still running. Please run "sudo service log2ram stop" to stop it.' ; exit 1 ;} ;;
   openrc)
-    rc-service log2ram status >/dev/null 2>&1  && { echo 'ERROR: log2ram service is still running. Please run "sudo rc-service log2ram stop" to stop it.' ; exit 1 ; } ;;
+    rc-service log2ram status >/dev/null 2>&1  && { echo 'ERROR: log2ram service is still running. Please run "sudo rc-service log2ram stop" to stop it.' ; exit 1 ;} ;;
   *) echo 'ERROR: could not detect init-system' ; exit 1
   ;;
 esac
@@ -46,6 +48,12 @@ rm -rf /var/log.hdd
 
 # Make sure we start clean
 rm -rf /var/hdd.log
+
+# Check if var SIZE is sufficient and show a warning when too small
+if [ -n "$(du -sh -t "$SIZE" /var/log | cut -f1)" ] ; then  # /var/log should be ok on all systems
+  echo 'WARNING: Variable SIZE in /etc/log2ram.conf is too small to store the /var/log!'
+  echo 'Actual size of /var/log is:' ; du -sh /var/log
+fi
 
 echo '#####         Reboot to activate log2ram!         #####'
 echo '##### Edit /etc/log2ram.conf to configure options #####'
