@@ -21,7 +21,7 @@ syncToDisk () {
     if [ "$USE_RSYNC" = true ]; then
         rsync -aXv --inplace --no-whole-file --delete-after $RAM_LOG/ $HDD_LOG/ 2>&1 | $LOG_OUTPUT
     else
-        cp -rfup $RAM_LOG/ -T $HDD_LOG/ 2>&1 | $LOG_OUTPUT
+        cp -rfupv $RAM_LOG/ -T $HDD_LOG/ 2>&1 | $LOG_OUTPUT
     fi
 }
 
@@ -42,7 +42,7 @@ syncFromDisk () {
     if [ "$USE_RSYNC" = true ]; then
         rsync -aXv --inplace --no-whole-file --delete-after $HDD_LOG/ $RAM_LOG/ 2>&1 | $LOG_OUTPUT
     else
-        cp -rfup $HDD_LOG/ -T $RAM_LOG/ 2>&1 | $LOG_OUTPUT
+        cp -rfupv $HDD_LOG/ -T $RAM_LOG/ 2>&1 | $LOG_OUTPUT
     fi
 }
 
