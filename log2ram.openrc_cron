@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
 
+sleep 5  # Delay to avoid conflict with logrotate
 rc-service log2ram write
