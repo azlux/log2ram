@@ -18,7 +18,13 @@ _____
 5. [Uninstall](#uninstall-)
 
 ## Install
+### With APT (recommended)
+    echo "deb http://packages.azlux.fr/debian/ buster main" | sudo tee /etc/apt/sources.list.d/azlux.list`
+    wget -qO - https://azlux.fr/repo.gpg.key | sudo apt-key add -`
+    apt update`
+    apt install log2ram`
 
+### Manually
     curl -Lo log2ram.tar.gz https://github.com/azlux/log2ram/archive/master.tar.gz
     tar xf log2ram.tar.gz
     cd log2ram-master

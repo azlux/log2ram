@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+
+systemctl -q is-active log2ram  && systemctl stop log2ram
+rm -rf /var/hdd.log
