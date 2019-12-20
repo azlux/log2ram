@@ -1,0 +1,5 @@
+log2ram (1.4.2) any; urgency=low
+* fix on rsync
+* Repository is here \o/
+
+-- Azlux <github@azlux.fr>  Fri, 20 Dec 2019 15:57:36 +0100
