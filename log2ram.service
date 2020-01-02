@@ -17,3 +17,4 @@ RemainAfterExit=yes
 
 [Install]
 WantedBy=sysinit.target
+RequiredBy=systemd-journald.service
