@@ -1,0 +1,32 @@
+#!/sbin/openrc-run
+
+# Init-Skript for log2ram
+# This skript is designed to work on Gentoo Linux with OpenRC
+
+description="Store logfiles in RAM to minimize writes to disk."
+
+# Command is available when the service is started
+extra_started_commands="write"
+
+depend() {
+  after localmount
+  before logger
+}
+  
+start() {
+  ebegin "Starting Log2Ram"
+    /usr/local/bin/log2ram start
+  eend $?
+}
+  
+stop() {
+  ebegin "Stopping Log2Ram"
+    /usr/local/bin/log2ram stop
+  eend $?
+}
+
+write() {
+  ebegin "Syncing logs to disk"
+    /usr/local/bin/log2ram write
+  eend $?
+}

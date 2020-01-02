@@ -1,5 +1,5 @@
 # Log2Ram
-Like ramlog for systemd (on debian 8 jessie for example).
+Like ramlog for systemd (on debian 8 jessie for example). Adapted to detect OpenRC init-system when running on Gentoo-Linux (Hopefully). For now only Systemd and OpenRC can be handled.
 
 Usefull for **RaspberryPi** for not writing on the SD card all the time. You need it because your SD card doesn't want to suffer anymore!
 
@@ -35,7 +35,7 @@ _____
 **REBOOT** before installing anything else (for example apache2)
 ## Upgrade
 
-You need to stop log2ram (`service log2ram stop`) and start the [install](#install).
+You need to stop log2ram (`service log2ram stop` with systemd or `rc-service log2ram stop` with OpenRC) and start the [install](#install).
 
 ## Customize
 #### variables :
