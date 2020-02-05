@@ -31,6 +31,3 @@ install -Dm 644 "$STARTDIR/log2ram.logrotate" "$DESTDIR/etc/logrotate.d/log2ram"
 mkdir "$DESTDIR/DEBIAN" "$OUTDIR"
 cp "$STARTDIR/debian/"* "$DESTDIR/DEBIAN/"
 dpkg-deb --build "$DESTDIR" "$OUTDIR"
-reprepro -b /var/www/repos/apt/debian includedeb buster "$OUTDIR"/*.deb
-reprepro -b /var/www/repos/apt/debian includedeb stretch "$OUTDIR"/*.deb
-
