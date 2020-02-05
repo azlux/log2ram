@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+systemctl daemon-reload
 systemctl enable log2ram
-echo "#####         Reboot to activate log2ram         #####"
-echo "##### edit /etc/log2ram.conf to configure options ####"
+
+if [ "$1" == "configure" ]; then
+	echo "#####         Reboot to activate log2ram         #####"
+	echo "##### edit /etc/log2ram.conf to configure options ####"
+fi
+
+exit 0

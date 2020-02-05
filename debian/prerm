@@ -1,2 +1,12 @@
 #!/usr/bin/env bash
-systemctl stop log2ram.service
+case "$1" in
+    upgrade)
+        [ -d  /run/systemd/system/ ] && systemctl stop log2ram
+        exit 0
+        ;;
+    *)
+        [ -d  /run/systemd/system/ ] && systemctl stop log2ram
+        [ -d  /run/systemd/system/ ] && systemctl disable log2ram
+        exit 0
+        ;;
+esac
