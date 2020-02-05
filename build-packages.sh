@@ -11,6 +11,10 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 STARTDIR="$(pwd)"
 DESTDIR="$STARTDIR/pkg"
 OUTDIR="$STARTDIR/deb"
+# get version
+repo="azlux/log2ram"
+api=$(curl --silent "https://api.github.com/repos/$repo/releases/latest")
+new=$(echo $api | grep -Po '"tag_name": "\K.*?(?=")')
 
 # Remove potential leftovers from a previous build
 rm -rf "$DESTDIR" "$OUTDIR"
@@ -30,4 +34,8 @@ install -Dm 644 "$STARTDIR/log2ram.logrotate" "$DESTDIR/etc/logrotate.d/log2ram"
 # Build .deb
 mkdir "$DESTDIR/DEBIAN" "$OUTDIR"
 cp "$STARTDIR/debian/"* "$DESTDIR/DEBIAN/"
+
+# Set version
+sed -i "s/VERSION-TO-REPLACE/$new/" "$DESTDIR/DEBIAN/control"
+
 dpkg-deb --build "$DESTDIR" "$OUTDIR"
