@@ -2,12 +2,8 @@
 
 . /etc/log2ram.conf
 
-HDD_LOG=/var/hdd.log
-RAM_LOG=/var/log
-
 LOG_NAME="log2ram.log"
-LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}"
-LOG_OUTPUT="tee -a $LOG2RAM_LOG"
+
 
 isSafe () {
     [ -d $HDD_LOG/ ] || echo "ERROR: $HDD_LOG/ doesn't exist! Can't sync."
@@ -16,31 +12,31 @@ isSafe () {
 
 syncToDisk () {
     isSafe
-
+    
     if [ "$USE_RSYNC" = true ]; then
-        rsync -aXv --inplace --no-whole-file --delete-after $RAM_LOG/ $HDD_LOG/ 2>&1 | $LOG_OUTPUT
+        rsync -aXv --inplace --no-whole-file --delete-after $RAM_LOG/ $HDD_LOG/ 2>&1 | tee -a $LOG2RAM_LOG
     else
-        cp -rfup $RAM_LOG/ -T $HDD_LOG/ 2>&1 | $LOG_OUTPUT
+        cp -rfup $RAM_LOG/ -T $HDD_LOG/ 2>&1 | tee -a $LOG2RAM_LOG
     fi
 }
 
 syncFromDisk () {
     isSafe
-
+    
     if [ ! -z "$(du -sh -t "$SIZE" $HDD_LOG/ | cut -f1)" ]; then
-        echo "ERROR: RAM disk too small. Can't sync."
+        echo "ERROR: RAM disk for "$HDD_LOG/" too small. Can't sync."
         umount -l $RAM_LOG/
         umount -l $HDD_LOG/
         if [ "$MAIL" = true ]; then
-            echo "LOG2RAM : No place on RAM anymore, fallback on the disk" | mail -s 'Log2Ram Error' root;
+            echo "LOG2RAM : No place on RAM for "$HDD_LOG/" anymore, fallback on the disk" | mail -s 'Log2Ram Error' root;
         fi
         exit 1
     fi
 
     if [ "$USE_RSYNC" = true ]; then
-        rsync -aXv --inplace --no-whole-file --delete-after $HDD_LOG/ $RAM_LOG/ 2>&1 | $LOG_OUTPUT
+        rsync -aXv --inplace --no-whole-file --delete-after $HDD_LOG/ $RAM_LOG/ 2>&1 | tee -a $LOG2RAM_LOG
     else
-        cp -rfup $HDD_LOG/ -T $RAM_LOG/ 2>&1 | $LOG_OUTPUT
+        cp -rfup $HDD_LOG/ -T $RAM_LOG/ 2>&1 | tee -a $LOG2RAM_LOG
     fi
 }
 
@@ -65,37 +61,65 @@ createZramLogDrive () {
 }
 
 case "$1" in
-  start)
-      [ -d $HDD_LOG/ ] || mkdir $HDD_LOG/
-      mount --bind $RAM_LOG/ $HDD_LOG/
-      mount --make-private $HDD_LOG/
-      wait_for $HDD_LOG
-	if [ "$ZL2R" = true ]; then
-		createZramLogDrive
-		mount -t ext4 -o nosuid,noexec,nodev,user=log2ram /dev/zram${RAM_DEV} ${RAM_LOG}/
-	else
-		mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size=${SIZE} log2ram $RAM_LOG/
-	fi
-      wait_for $RAM_LOG
-      syncFromDisk
-      ;;
+    start)
+        IFS=';'
+        for i in $PATH_DISK; do
+            PATH_FIRST_PART=$( echo ${i%/*} )
+            PATH_LAST_PART=$( echo ${i##/*/} )
+            RAM_LOG=$i
+            HDD_LOG=$PATH_FIRST_PART/hdd.$PATH_LAST_PART
+            LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}"
+        
+            [ -d $HDD_LOG/ ] || mkdir $HDD_LOG/
+            mount --bind $RAM_LOG/ $HDD_LOG/
+            mount --make-private $HDD_LOG/
+            wait_for $HDD_LOG
+        
+            if [ "$ZL2R" = true ]; then
+                createZramLogDrive
+                mount -t ext4 -o nosuid,noexec,nodev,user=log2ram /dev/zram${RAM_DEV} ${RAM_LOG}/
+            else
+                mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size=${SIZE} log2ram $RAM_LOG/
+            fi
+            wait_for $RAM_LOG
+            syncFromDisk
+        done
+        ;;
 
-  stop)
-      syncToDisk
-	#ZRAM_LOG=$(awk '$2 == "/var/log" {print $1}' /proc/mounts)
-	#ZRAM_LOG=$(echo ${ZRAM_LOG} | grep -o -E '[0-9]+')
-      umount -l $RAM_LOG/
-      umount -l $HDD_LOG/
-	# Unsure as even with Root permision denied
-	#echo ${ZRAM_LOG} > /sys/class/zram-control/hot_remove
-      ;;
+    stop)
+        IFS=';'
+        for i in $PATH_DISK; do
+            PATH_FIRST_PART=$( echo ${i%/*} )
+            PATH_LAST_PART=$( echo ${i##/*/} )
+            RAM_LOG=$i
+            HDD_LOG=$PATH_FIRST_PART/hdd.$PATH_LAST_PART
+            LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}"
+            
+            syncToDisk
+            #ZRAM_LOG=$(awk '$2 == "/var/log" {print $1}' /proc/mounts)
+            #ZRAM_LOG=$(echo ${ZRAM_LOG} | grep -o -E '[0-9]+')
+            umount -l $RAM_LOG/
+            umount -l $HDD_LOG/
+            # Unsure as even with Root permision denied
+            #echo ${ZRAM_LOG} > /sys/class/zram-control/hot_remove
+        done
+        ;;
 
-  write)
-      syncToDisk
-      ;;
+    write)
+        IFS=';'
+        for i in $PATH_DISK; do
+            PATH_FIRST_PART=$( echo ${i%/*} )
+            PATH_LAST_PART=$( echo ${i##/*/} )
+            RAM_LOG=$i
+            HDD_LOG=$PATH_FIRST_PART/hdd.$PATH_LAST_PART
+            LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}"
+            
+            syncToDisk
+        done
+        ;;
 
-  *)
-      echo "Usage: log2ram {start|stop|write}" >&2
-      exit 1
-      ;;
+    *)
+        echo "Usage: log2ram {start|stop|write}" >&2
+        exit 1
+        ;;
 esac
