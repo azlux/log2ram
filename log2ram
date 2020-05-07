@@ -23,7 +23,12 @@ syncToDisk () {
 syncFromDisk () {
     isSafe
     
-    if [ ! -z "$(du -sh -t "$SIZE" $HDD_LOG/ | cut -f1)" ]; then
+    TP_SIZE=$SIZE
+    if [ "$ZL2R" = true ]; then
+        TP_SIZE=$LOG_DISK_SIZE
+    then
+    
+    if [ ! -z "$(du -sh -t "$TP_SIZE" $HDD_LOG/ | cut -f1)" ]; then
         echo "ERROR: RAM disk for "$HDD_LOG/" too small. Can't sync."
         umount -l $RAM_LOG/
         umount -l $HDD_LOG/
