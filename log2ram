@@ -25,8 +25,8 @@ remountRW() {
 }
 
 remountOriginal() {
-	OPTION=$1
-	mount -o remount,${OPTION} ${HDD_LOG}
+    OPTION=$1
+    mount -o remount,${OPTION} ${HDD_LOG}
 }
 
 syncToDisk () {
@@ -112,13 +112,11 @@ case "$1" in
             RAM_LOG=$i
             HDD_LOG=$PATH_FIRST_PART/hdd.$PATH_LAST_PART
             LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}"
-
 	    make_log_dir
-
 	    mount --bind $RAM_LOG/ $HDD_LOG/
             mount --make-private $HDD_LOG/
             wait_for $HDD_LOG
-        
+
             if [ "$ZL2R" = true ]; then
                 createZramLogDrive
                 mount -t ext4 -o nosuid,noexec,noatime,nodev,user=log2ram /dev/zram${RAM_DEV} ${RAM_LOG}/
