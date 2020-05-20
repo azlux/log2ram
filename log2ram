@@ -10,19 +10,40 @@ isSafe () {
     [ -d $HDD_LOG/ ] || exit 1
 }
 
+remountRW() {
+    touch $HDD_LOG/$$ 2>/dev/null >/dev/null
+    RESU=$?
+    INITIAL_STATUS=ro
+    if  [ "$RESU" != "0" ] ; then
+	mount -o remount,rw ${HDD_LOG}
+    else
+	INITIAL_STATUS=rw
+	rm $HDD_LOG/$$ 2>/dev/null
+    fi
+    # for return
+    echo $INITIAL_STATUS
+}
+
+remountOriginal() {
+    OPTION=$1
+    mount -o remount,${OPTION} ${HDD_LOG}
+}
+
 syncToDisk () {
     isSafe
-    
+    INITIAL_STATE=$(remountRW)
+
     if [ "$USE_RSYNC" = true ]; then
         rsync -aXv --inplace --no-whole-file --delete-after $RAM_LOG/ $HDD_LOG/ 2>&1 | tee -a $LOG2RAM_LOG
     else
         cp -rfup $RAM_LOG/ -T $HDD_LOG/ 2>&1 | tee -a $LOG2RAM_LOG
     fi
+    remountOriginal ${INITIAL_STATE}
 }
 
 syncFromDisk () {
     isSafe
-    
+
     TP_SIZE=$SIZE
     if [ "$ZL2R" = true ]; then
         TP_SIZE=$LOG_DISK_SIZE
@@ -43,6 +64,7 @@ syncFromDisk () {
     else
         cp -rfup $HDD_LOG/ -T $RAM_LOG/ 2>&1 | tee -a $LOG2RAM_LOG
     fi
+
 }
 
 wait_for () {
@@ -65,6 +87,22 @@ createZramLogDrive () {
 	mke2fs -t ext4 /dev/zram${RAM_DEV}
 }
 
+make_log_dir () {
+	# if create mount failed, try to remount in rw the parent directory
+	# and restore original status
+	if [ ! -d $HDD_LOG/ ] ; then
+	   mkdir $HDD_LOG/ 2>/dev/null /dev/null
+	   RESU=$?
+	   if [ "$RESU" -ne "0" ] ; then
+		MOUNT_POINT=$(findmnt -T ` dirname $HDD_LOG/ ` -n --raw | cut -d ' ' -f 1 )
+		mount -o remount,rw ${MOUNT_POINT}
+		sleep 0.1
+		mkdir $HDD_LOG/
+		mount -o remount,ro ${MOUNT_POINT}
+	   fi
+     fi
+}
+
 case "$1" in
     start)
         IFS=';'
@@ -74,17 +112,16 @@ case "$1" in
             RAM_LOG=$i
             HDD_LOG=$PATH_FIRST_PART/hdd.$PATH_LAST_PART
             LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}"
-        
-            [ -d $HDD_LOG/ ] || mkdir $HDD_LOG/
-            mount --bind $RAM_LOG/ $HDD_LOG/
+	    make_log_dir
+	    mount --bind $RAM_LOG/ $HDD_LOG/
             mount --make-private $HDD_LOG/
             wait_for $HDD_LOG
-        
+
             if [ "$ZL2R" = true ]; then
                 createZramLogDrive
-                mount -t ext4 -o nosuid,noexec,nodev,user=log2ram /dev/zram${RAM_DEV} ${RAM_LOG}/
+                mount -t ext4 -o nosuid,noexec,noatime,nodev,user=log2ram /dev/zram${RAM_DEV} ${RAM_LOG}/
             else
-                mount -t tmpfs -o nosuid,noexec,nodev,mode=0755,size=${SIZE} log2ram $RAM_LOG/
+                mount -t tmpfs -o nosuid,noexec,noatime,nodev,mode=0755,size=${SIZE} log2ram $RAM_LOG/
             fi
             wait_for $RAM_LOG
             syncFromDisk
