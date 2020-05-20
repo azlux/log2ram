@@ -15,10 +15,10 @@ remountRW() {
     RESU=$?
     INITIAL_STATUS=ro
     if  [ "$RESU" != "0" ] ; then
-	mount -o remount,rw ${HDD_LOG}
+        mount -o remount,rw ${HDD_LOG}
     else
-	INITIAL_STATUS=rw
-	rm $HDD_LOG/$$ 2>/dev/null
+        INITIAL_STATUS=rw
+        rm $HDD_LOG/$$ 2>/dev/null
     fi
     # for return
     echo $INITIAL_STATUS
@@ -91,14 +91,14 @@ make_log_dir () {
 	# if create mount failed, try to remount in rw the parent directory
 	# and restore original status
 	if [ ! -d $HDD_LOG/ ] ; then
-	   mkdir $HDD_LOG/ 2>/dev/null /dev/null
-	   RESU=$?
-	   if [ "$RESU" -ne "0" ] ; then
-		MOUNT_POINT=$(findmnt -T ` dirname $HDD_LOG/ ` -n --raw | cut -d ' ' -f 1 )
-		mount -o remount,rw ${MOUNT_POINT}
-		sleep 0.1
-		mkdir $HDD_LOG/
-		mount -o remount,ro ${MOUNT_POINT}
+        mkdir $HDD_LOG/ 2>/dev/null /dev/null
+        RESU=$?
+        if [ "$RESU" -ne "0" ] ; then
+            MOUNT_POINT=$(findmnt -T ` dirname $HDD_LOG/ ` -n --raw | cut -d ' ' -f 1 )
+            mount -o remount,rw ${MOUNT_POINT}
+            sleep 0.1
+            mkdir $HDD_LOG/
+            mount -o remount,ro ${MOUNT_POINT}
 	   fi
      fi
 }
@@ -112,8 +112,10 @@ case "$1" in
             RAM_LOG=$i
             HDD_LOG=$PATH_FIRST_PART/hdd.$PATH_LAST_PART
             LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}"
-	    make_log_dir
-	    mount --bind $RAM_LOG/ $HDD_LOG/
+            
+            make_log_dir
+            
+            mount --bind $RAM_LOG/ $HDD_LOG/
             mount --make-private $HDD_LOG/
             wait_for $HDD_LOG
 
