@@ -2,6 +2,10 @@
 
 . /etc/log2ram.conf
 
+if [ -z "$PATH_DISK" ]; then
+    PATH_DISK="/var/log"
+fi
+
 LOG_NAME="log2ram.log"
 
 
