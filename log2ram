@@ -35,14 +35,14 @@ remountOriginal() {
 
 syncToDisk () {
     isSafe
-    INITIAL_STATE=$(remountRW)
+    #INITIAL_STATE=$(remountRW)
 
     if [ "$USE_RSYNC" = true ]; then
         rsync -aXv --inplace --no-whole-file --delete-after $RAM_LOG/ $HDD_LOG/ 2>&1 | tee -a $LOG2RAM_LOG
     else
         cp -rfup $RAM_LOG/ -T $HDD_LOG/ 2>&1 | tee -a $LOG2RAM_LOG
     fi
-    remountOriginal ${INITIAL_STATE}
+    #remountOriginal ${INITIAL_STATE}
 }
 
 syncFromDisk () {
@@ -92,19 +92,20 @@ createZramLogDrive () {
 }
 
 make_log_dir () {
+    [ -d $HDD_LOG/ ] || mkdir $HDD_LOG/
 	# if create mount failed, try to remount in rw the parent directory
 	# and restore original status
-	if [ ! -d $HDD_LOG/ ] ; then
-        mkdir $HDD_LOG/ 2>/dev/null /dev/null
-        RESU=$?
-        if [ "$RESU" -ne "0" ] ; then
-            MOUNT_POINT=$(findmnt -T ` dirname $HDD_LOG/ ` -n --raw | cut -d ' ' -f 1 )
-            mount -o remount,rw ${MOUNT_POINT}
-            sleep 0.1
-            mkdir $HDD_LOG/
-            mount -o remount,ro ${MOUNT_POINT}
-	   fi
-     fi
+	#if [ ! -d $HDD_LOG/ ] ; then
+    #    mkdir $HDD_LOG/ 2>/dev/null /dev/null
+    #    RESU=$?
+    #    if [ "$RESU" -ne "0" ] ; then
+    #        MOUNT_POINT=$(findmnt -T ` dirname $HDD_LOG/ ` -n --raw | cut -d ' ' -f 1 )
+    #        mount -o remount,rw ${MOUNT_POINT}
+    #        sleep 0.1
+    #        mkdir $HDD_LOG/
+    #        mount -o remount,ro ${MOUNT_POINT}
+	#   fi
+    # fi
 }
 
 case "$1" in
