@@ -34,6 +34,9 @@ remountOriginal() {
 }
 
 syncToDisk () {
+    
+    if [ "$WRITE_TO_DISK" = true ]; then
+    
     isSafe
     #INITIAL_STATE=$(remountRW)
 
@@ -43,6 +46,8 @@ syncToDisk () {
         cp -rfup $RAM_LOG/ -T $HDD_LOG/ 2>&1 | tee -a $LOG2RAM_LOG
     fi
     #remountOriginal ${INITIAL_STATE}
+    
+    fi
 }
 
 syncFromDisk () {
