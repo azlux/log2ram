@@ -23,12 +23,13 @@ rm -rf "$DESTDIR" "$OUTDIR"
 ## log2ram
 # Create directory
 install -Dm 644 "$STARTDIR/log2ram.service" "$DESTDIR/etc/systemd/system/log2ram.service"
+install -Dm 644 "$STARTDIR/log2ram-daily.service" "$DESTDIR/etc/systemd/system/log2ram-daily.service"
+install -Dm 644 "$STARTDIR/log2ram-daily.timer" "$DESTDIR/etc/systemd/system/log2ram-daily.timer"
 install -Dm 755 "$STARTDIR/log2ram" "$DESTDIR/usr/local/bin/log2ram"
 install -Dm 644 "$STARTDIR/log2ram.conf" "$DESTDIR/etc/log2ram.conf"
 install -Dm 644 "$STARTDIR/uninstall.sh" "$DESTDIR/usr/local/bin/uninstall-log2ram.sh"
 
-# cron
-install -Dm 755 "$STARTDIR/log2ram.cron" "$DESTDIR/etc/cron.daily/log2ram"
+# logrotate
 install -Dm 644 "$STARTDIR/log2ram.logrotate" "$DESTDIR/etc/logrotate.d/log2ram"
 
 # Build .deb

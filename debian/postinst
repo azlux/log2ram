@@ -2,7 +2,7 @@
 set -euo pipefail
 
 systemctl daemon-reload
-systemctl enable log2ram
+systemctl enable log2ram.service log2ram-daily.timer
 
 if [ "$1" == "configure" ]; then
 	echo "#####         Reboot to activate log2ram         #####"

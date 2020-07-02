@@ -6,13 +6,14 @@ systemctl -q is-active log2ram  && { echo "ERROR: log2ram service is still runni
 # log2ram
 mkdir -p /usr/local/bin/
 install -m 644 log2ram.service /etc/systemd/system/log2ram.service
+install -m 644 log2ram-daily.service /etc/systemd/system/log2ram-daily.service
+install -m 644 log2ram-daily.timer /etc/systemd/system/log2ram-daily.timer
 install -m 755 log2ram /usr/local/bin/log2ram
 install -m 644 log2ram.conf /etc/log2ram.conf
 install -m 644 uninstall.sh /usr/local/bin/uninstall-log2ram.sh
-systemctl enable log2ram
+systemctl enable log2ram.service log2ram-daily.timer
 
-# cron
-install -m 755 log2ram.cron /etc/cron.daily/log2ram
+# logrotate
 install -m 644 log2ram.logrotate /etc/logrotate.d/log2ram
 
 # Remove a previous log2ram version

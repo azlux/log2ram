@@ -47,7 +47,13 @@ In the file `/etc/log2ram.conf`, there are three variables:
 - `ZL2R`: Enable zram compatibility (`false` by default). Check the comment on the config file. See https://github.com/StuartIanNaylor/zram-swap-config to configure a zram space on your raspberry before enable this option.
 
 #### refresh time:
-By default Log2Ram writes to the HardDisk every day. If you think this is too much, you can move `/etc/cron.daily/log2ram` in an other cron folder, or remove it if you prefer writing logs only at stop/reboot.
+By default Log2Ram writes to disk every day. If you think this is too much, you can run `systemctl edit log2ram-daily.timer` and add:
+
+```ini
+[Timer]
+OnCalendar=weekly
+```
+... or even disable it with `systemctl disable log2ram-daily.timer`, if you prefer writing logs only at stop/reboot.
 
 ### It is working?
 You can now check the mount folder in ram with (You will see lines with log2ram if working)

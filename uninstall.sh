@@ -2,12 +2,11 @@
 
 if [ "$(id -u)" -eq 0 ]
 then
-  service log2ram stop
-  systemctl disable log2ram
-  rm /etc/systemd/system/log2ram.service
+  systemctl stop log2ram.service log2ram-daily.timer
+  systemctl disable log2ram.service log2ram-daily.timer
+  rm -rf /etc/systemd/system/log2ram*
   rm /usr/local/bin/log2ram
   rm /etc/log2ram.conf
-  rm /etc/cron.daily/log2ram
   rm /etc/logrotate.d/log2ram
 
   if [ -d /var/hdd.log ]; then
