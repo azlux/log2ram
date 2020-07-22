@@ -85,6 +85,13 @@ Compressor for zram. Usefull for the `COMP_ALG` of ZRAM on the config file.
 
 ## Uninstall :(
 (Because sometime we need it)
+### With APT
+```
+apt remove log2ram
+```
+You can use `--purge` to remove config files as well.
+
+### Manually
 ```
 chmod +x /usr/local/bin/uninstall-log2ram.sh && sudo /usr/local/bin/uninstall-log2ram.sh
 ```
