@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-if dpkg -l log2ram ; then
+if dpkg -l log2ram 2> /dev/null; then
   echo "Please run : apt remove log2ram"
   exit 1
 fi
