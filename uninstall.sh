@@ -1,7 +1,13 @@
 #!/usr/bin/env sh
 
+if dpkg -l log2ram ; then
+  echo "Please run : apt remove log2ram"
+  exit 1
+fi
+
 if [ "$(id -u)" -eq 0 ]
 then
+  echo "Not apt installed. Remove will continue with this script..."
   systemctl stop log2ram.service log2ram-daily.timer
   systemctl disable log2ram.service log2ram-daily.timer
   rm -rf /etc/systemd/system/log2ram*
