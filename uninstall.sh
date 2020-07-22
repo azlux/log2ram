@@ -13,7 +13,7 @@ then
   rm -rf /etc/systemd/system/log2ram*
   rm /usr/local/bin/log2ram
   rm /etc/log2ram.conf
-  rm /etc/logrotate.d/log2ram
+  rm -f /etc/logrotate.d/log2ram
 
   if [ -d /var/hdd.log ]; then
     rm -r /var/hdd.log

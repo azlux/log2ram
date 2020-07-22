@@ -14,7 +14,12 @@ install -m 644 uninstall.sh /usr/local/bin/uninstall-log2ram.sh
 systemctl enable log2ram.service log2ram-daily.timer
 
 # logrotate
-install -m 644 log2ram.logrotate /etc/logrotate.d/log2ram
+if [ -d /etc/logrotate.d ]; then
+	install -m 644 log2ram.logrotate /etc/logrotate.d/log2ram
+else
+	echo "##### Directory /etc/logrotate.d does not exist. #####"
+	echo "#####  Skipping log2ram.logrotate installation.  #####"
+fi
 
 # Remove a previous log2ram version
 rm -rf /var/log.hdd
