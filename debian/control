@@ -7,3 +7,4 @@ Maintainer: Azlux <github@azlux.fr>
 Description: ramlog like for systemd (Put log into a ram folder)
 Homepage: https://github.com/azlux/log2ram
 Bugs: https://github.com/azlux/log2ram/issues
+Recommends: rsync
