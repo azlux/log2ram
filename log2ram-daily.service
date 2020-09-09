@@ -3,4 +3,4 @@ Description=Daily Log2Ram writing activities
 After=log2ram.service
 
 [Service]
-ExecStart=/usr/bin/systemctl reload log2ram.service
+ExecStart=/bin/systemctl reload log2ram.service
