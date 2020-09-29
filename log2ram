@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-#. /etc/log2ram.conf
+. /etc/log2ram.conf
 
 if [ -z "$PATH_DISK" ]; then
     PATH_DISK='/var/log'
@@ -56,9 +56,9 @@ syncFromDisk () {
 }
 
 wait_for () {
-  while ! mount | grep "$1" > /dev/null;  do
-    sleep 0.1
-  done
+    while ! mount | grep "$1" > /dev/null;  do
+      sleep 0.1
+    done
 }
 
 createZramLogDrive () {
