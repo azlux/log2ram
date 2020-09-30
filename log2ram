@@ -56,7 +56,7 @@ syncFromDisk () {
 }
 
 wait_for () {
-    while ! mount | grep "$1" > /dev/null; do
+    while ! findmnt "$1" > /dev/null; do
       sleep 0.1
     done
 }
