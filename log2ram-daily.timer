@@ -2,7 +2,7 @@
 Description=Daily Log2Ram writing activities
 
 [Timer]
-OnCalendar=daily
+OnCalendar=*-*-* 23:55:00
 Persistent=true
 
 [Install]
