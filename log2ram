@@ -15,8 +15,8 @@ isSafe () {
 }
 
 remountOriginal() {
-    OPTION=$1
-    mount -o remount,${OPTION} "$HDD_LOG"
+    OPTION="$1"
+    mount -o remount,"$OPTION" "$HDD_LOG"
 }
 
 syncToDisk () {
