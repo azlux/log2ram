@@ -32,18 +32,20 @@ _____
     cd ..
     rm -r log2ram-master
 
+For better performances. `RSYNC` is a recommended package.
+
 **REBOOT** before installing anything else (for example apache2)
 ## Upgrade
 
-You need to stop log2ram (`service log2ram stop`) and start the [install](#install).
+You need to stop log2ram (`service log2ram stop`) and start the [install](#install). (APT will do it automatically)
 
 ## Customize
 #### variables :
 In the file `/etc/log2ram.conf`, there are three variables:
 
 - `SIZE`: defines the size the log folder will reserve into the RAM (default is 40M).
-- `USE_RSYNC`: Can be set to `true` if you prefer ´rsync´ rather than ´cp´. I use the command `cp -u` and `rsync -X`, I don't copy the all folder every time for optimization.
 - `MAIL`: Disables the error system mail if there is not enough place on RAM (if set to `false`)
+- `PATH_DISK`: activate log2ram for other path than default one. Paths should be separated with a `;`
 - `ZL2R`: Enable zram compatibility (`false` by default). Check the comment on the config file. See https://github.com/StuartIanNaylor/zram-swap-config to configure a zram space on your raspberry before enable this option.
 
 #### refresh time:
@@ -69,9 +71,7 @@ log2ram on /var/log type tmpfs (rw,nosuid,nodev,noexec,relatime,size=40960k,mode
 …
 ```
 
-If you have issue with apache2, you can try to add `apache2.service` next to other services on the `Before` parameter in `/etc/systemd/system/log2ram.service` it will solve the pb
-
-The log for log2ram will be written at: `/var/log/log2ram.log`
+The log for log2ram will be written at: `/var/log/log2ram.log` and available with `sudo journalctl -t log2ram`
 
 Compressor for zram. Usefull for the `COMP_ALG` of ZRAM on the config file.
 
