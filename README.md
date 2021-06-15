@@ -12,9 +12,9 @@ Log2Ram is based on transient log for Systemd here : [A transient /var/log](http
 _____
 ## Menu
 1. [Install](#install)
-2. [Upgrade](#upgrade)
-3. [Customize](#customize)
-4. [It is working ?](#it-is-working)
+2. [Is it working?](#is-it-working)
+3. [Upgrade](#upgrade)
+4. [Customize](#customize)
 5. [Uninstall](#uninstall-)
 
 ## Install
@@ -35,6 +35,23 @@ _____
 For better performances. `RSYNC` is a recommended package.
 
 **REBOOT** before installing anything else (for example apache2)
+
+## Is it working?
+You can now check the mount folder in ram with (You will see lines with log2ram if working)
+```
+# df -h
+…
+log2ram          40M  532K   40M   2% /var/log
+…
+
+# mount
+…
+log2ram on /var/log type tmpfs (rw,nosuid,nodev,noexec,relatime,size=40960k,mode=755)
+…
+```
+
+The log for log2ram will be written at: `/var/log/log2ram.log` and available with `sudo journalctl -t log2ram`
+
 ## Upgrade
 
 You need to stop log2ram (`service log2ram stop`) and start the [install](#install). (APT will do it automatically)
@@ -57,22 +74,7 @@ OnCalendar=weekly
 ```
 ... or even disable it with `systemctl disable log2ram-daily.timer`, if you prefer writing logs only at stop/reboot.
 
-### It is working?
-You can now check the mount folder in ram with (You will see lines with log2ram if working)
-```
-# df -h
-…
-log2ram          40M  532K   40M   2% /var/log
-…
-
-# mount
-…
-log2ram on /var/log type tmpfs (rw,nosuid,nodev,noexec,relatime,size=40960k,mode=755)
-…
-```
-
-The log for log2ram will be written at: `/var/log/log2ram.log` and available with `sudo journalctl -t log2ram`
-
+#### compressor:
 Compressor for zram. Usefull for the `COMP_ALG` of ZRAM on the config file.
 
 | Compressor name	     | Ratio	| Compression | Decompress. |
