@@ -37,20 +37,28 @@ For better performances. `RSYNC` is a recommended package.
 **REBOOT** before installing anything else (for example apache2)
 
 ## Is it working?
-You can now check the mount folder in ram with (You will see lines with log2ram if working)
+After installing and rebooting, use systemctl to check if Log2Ram started successfully:
+
 ```
-# df -h
-…
+systemctl status log2ram
+```
+
+This will show a color-coded status (green active/red failed) as well as the last few log lines. To show the full log (scrolled to the end), run:
+
+```
+journalctl -u log2ram -e
+```
+
+The log is also written to `/var/log/log2ram.log`.
+
+You can also inspect the mount folder in ram with (You will see lines with log2ram if working)
+```
+# df -h | grep log2ram
 log2ram          40M  532K   40M   2% /var/log
-…
 
-# mount
-…
+# mount | grep log2ram
 log2ram on /var/log type tmpfs (rw,nosuid,nodev,noexec,relatime,size=40960k,mode=755)
-…
 ```
-
-The log for log2ram will be written at: `/var/log/log2ram.log` and available with `sudo journalctl -t log2ram`
 
 ## Upgrade
 
