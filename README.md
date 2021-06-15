@@ -10,7 +10,7 @@ The script [log2ram](https://github.com/azlux/log2ram) can work on every linux s
 Log2Ram is based on transient log for Systemd here : [A transient /var/log](https://www.debian-administration.org/article/661/A_transient_/var/log)
 
 _____
-## Menu
+## Table of Contents
 1. [Install](#install)
 2. [Is it working?](#is-it-working)
 3. [Upgrade](#upgrade)
