@@ -15,7 +15,8 @@ _____
 2. [Is it working?](#is-it-working)
 3. [Upgrade](#upgrade)
 4. [Customize](#customize)
-5. [Uninstall](#uninstall-)
+5. [Troubleshooting](#troubleshooting)
+6. [Uninstall](#uninstall-)
 
 ## Install
 ### With APT (recommended)
@@ -98,6 +99,35 @@ Compressor for zram. Usefull for the `COMP_ALG` of ZRAM on the config file.
 
 ###### Now, muffins for everyone!
 
+## Troubleshooting
+
+### Existing content in `/var/log` too large for RAM
+
+One thing that stops Log2Ram from starting is if `/var/log` is to large before starting Log2Ram the first time. This can happen if logs had been collected for a long time before installing Log2Ram. Find the largest directories in `/var/log` (this commands only shows the 3 largest):
+
+```
+sudo du -hs /var/log/* | sort -h | tail -n 3
+```
+
+If the `/var/log/journal` is very large, then there are a lot of system logs. Deletion of old "archived" logs can be fixed by adjusting a setting. Edit the `/etc/systemd/journald.conf` file and add the following option:
+
+```
+SystemMaxUse=20M
+```
+
+This should be set to a value smaller than the size of the RAM volume, for example half. Then apply the new setting:
+
+```
+sudo restart systemd-journal
+```
+
+This should shrink the size of "archived" logs to be below the limit. Reboot and check that Log2Ram succeds:
+
+```
+sudo reboot
+…
+systemctl status log2ram
+```
 
 ## Uninstall :(
 (Because sometime we need it)
