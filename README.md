@@ -10,12 +10,13 @@ The script [log2ram](https://github.com/azlux/log2ram) can work on every linux s
 Log2Ram is based on transient log for Systemd here : [A transient /var/log](https://www.debian-administration.org/article/661/A_transient_/var/log)
 
 _____
-## Menu
+## Table of Contents
 1. [Install](#install)
-2. [Upgrade](#upgrade)
-3. [Customize](#customize)
-4. [It is working ?](#it-is-working)
-5. [Uninstall](#uninstall-)
+2. [Is it working?](#is-it-working)
+3. [Upgrade](#upgrade)
+4. [Customize](#customize)
+5. [Troubleshooting](#troubleshooting)
+6. [Uninstall](#uninstall-)
 
 ## Install
 ### With APT (recommended)
@@ -35,6 +36,31 @@ _____
 For better performances. `RSYNC` is a recommended package.
 
 **REBOOT** before installing anything else (for example apache2)
+
+## Is it working?
+After installing and rebooting, use systemctl to check if Log2Ram started successfully:
+
+```
+systemctl status log2ram
+```
+
+This will show a color-coded status (green active/red failed) as well as the last few log lines. To show the full log (scrolled to the end), run:
+
+```
+journalctl -u log2ram -e
+```
+
+The log is also written to `/var/log/log2ram.log`.
+
+You can also inspect the mount folder in ram with (You will see lines with log2ram if working)
+```
+# df -h | grep log2ram
+log2ram          40M  532K   40M   2% /var/log
+
+# mount | grep log2ram
+log2ram on /var/log type tmpfs (rw,nosuid,nodev,noexec,relatime,size=40960k,mode=755)
+```
+
 ## Upgrade
 
 You need to stop log2ram (`service log2ram stop`) and start the [install](#install). (APT will do it automatically)
@@ -57,22 +83,7 @@ OnCalendar=weekly
 ```
 ... or even disable it with `systemctl disable log2ram-daily.timer`, if you prefer writing logs only at stop/reboot.
 
-### It is working?
-You can now check the mount folder in ram with (You will see lines with log2ram if working)
-```
-# df -h
-…
-log2ram          40M  532K   40M   2% /var/log
-…
-
-# mount
-…
-log2ram on /var/log type tmpfs (rw,nosuid,nodev,noexec,relatime,size=40960k,mode=755)
-…
-```
-
-The log for log2ram will be written at: `/var/log/log2ram.log` and available with `sudo journalctl -t log2ram`
-
+#### compressor:
 Compressor for zram. Usefull for the `COMP_ALG` of ZRAM on the config file.
 
 | Compressor name	     | Ratio	| Compression | Decompress. |
@@ -88,6 +99,35 @@ Compressor for zram. Usefull for the `COMP_ALG` of ZRAM on the config file.
 
 ###### Now, muffins for everyone!
 
+## Troubleshooting
+
+### Existing content in `/var/log` too large for RAM
+
+One thing that stops Log2Ram from starting is if `/var/log` is to large before starting Log2Ram the first time. This can happen if logs had been collected for a long time before installing Log2Ram. Find the largest directories in `/var/log` (this commands only shows the 3 largest):
+
+```
+sudo du -hs /var/log/* | sort -h | tail -n 3
+```
+
+If the `/var/log/journal` is very large, then there are a lot of system logs. Deletion of old "archived" logs can be fixed by adjusting a setting. Edit the `/etc/systemd/journald.conf` file and add the following option:
+
+```
+SystemMaxUse=20M
+```
+
+This should be set to a value smaller than the size of the RAM volume, for example half. Then apply the new setting:
+
+```
+sudo restart systemd-journal
+```
+
+This should shrink the size of "archived" logs to be below the limit. Reboot and check that Log2Ram succeds:
+
+```
+sudo reboot
+…
+systemctl status log2ram
+```
 
 ## Uninstall :(
 (Because sometime we need it)
