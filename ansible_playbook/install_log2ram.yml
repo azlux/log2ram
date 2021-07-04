@@ -1,32 +1,76 @@
---- 
+#!/usr/bin/env ansible-playbook
+---
+# Configure Raspberry Pi to log to RAM, with occasional SD card sync
+# to reduce SD card writes
+# Usage: ansible-playbook -e 'log2ram_size=80M' install_log2ram.yml
+
 - hosts: all
+  gather_facts: true
+  gather_subset: min
   become: true
+
+
+  vars:
+    apt_keyring_file: azlux.fr.log2ram.gpg
+    apt_sources_file: log2ram.list
+
+    log2ram_size: 40M
+    log2ram_path_disk: /var/log
+    log2ram_use_z2lr: true
+    log2ram_comp_alg: lz4
+    log2ram_log_disk_size: 100M
+
+
   tasks:
-  - name: Add apt-key for new repository
-    apt_key:
-      keyserver: keyserver.ubuntu.com
-      id: CA548A0A0312D8E6
-  - name: Add log2ram to sources.list
-    apt_repository:
-      repo: deb http://packages.azlux.fr/debian/ buster main
-      state: present
-  - name: update pkg database
-    apt:
-      upgrade: yes
-      update_cache: yes
-  - name: Install log2ram
-    apt:
-      pkg:
-      - log2ram
+    - name: "Add /etc/apt/sources.list.d/{{ apt_sources_file }}"
+      copy:
+        content: "deb http://packages.azlux.fr/debian/ {{ ansible_facts['distribution_release'] }} main\n"
+        dest: /etc/apt/sources.list.d/{{ apt_sources_file }}
+        mode: 0644
+        owner: root
+      register: source_list
 
-  - name: modify config
-    lineinfile:
-      path: /etc/log2ram.conf
-      regexp: '^SIZE=(.*)$'
-      line: 'SIZE=80M'
-      backrefs: yes
+    - name: Import apt key
+      apt_key:
+        url: https://azlux.fr/repo.gpg.key
+        id: 98B824A5FA7D3A10FDB225B7CA548A0A0312D8E6
+        keyring: /etc/apt/trusted.gpg.d/{{ apt_keyring_file }}
+      register: dl_key
 
-  - name: Start log2ram service
-    systemd:
-      state: started
-      name: log2ram
+    - name: Remove tilde backup file {{ apt_keyring_file }}~
+      file:
+        path: /etc/apt/trusted.gpg.d/{{ apt_keyring_file }}~
+        state: absent
+
+    - name: update apt cache
+      apt:
+        update_cache: true
+      when: dl_key is changed or source_list is changed
+
+    - name: Install log2ram
+      apt:
+        pkg:
+          - log2ram
+      register: pkg
+      notify: Restart log2ram
+
+    - name: Set config options
+      lineinfile:
+        path: /etc/log2ram.conf
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        backrefs: true
+      loop:
+        - {regexp: '^SIZE=(.*)$', line: 'SIZE={{ log2ram_size }}'}
+        - {regexp: '^PATH_DISK=(.*)$', line: 'PATH_DISK="{{ log2ram_path_disk }}"'}
+        - {regexp: '^ZL2R=(.*)$', line: 'ZL2R={{ log2ram_use_z2lr|lower }}'}
+        - {regexp: '^COMP_ALG=(.*)$', line: 'COMP_ALG={{ log2ram_comp_alg }}'}
+        - {regexp: '^LOG_DISK_SIZE=(.*)$', line: 'LOG_DISK_SIZE={{ log2ram_log_disk_size }}'}
+      notify: Restart log2ram
+
+
+  handlers:
+    - name: Restart log2ram
+      systemd:
+        name: log2ram
+        state: restarted
