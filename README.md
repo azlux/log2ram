@@ -79,7 +79,8 @@ By default Log2Ram writes to disk every day. If you think this is too much, you 
 
 ```ini
 [Timer]
-OnCalendar=weekly
+OnCalendar=
+OnCalendar=Mon *-*-* 23:55:00
 ```
 ... or even disable it with `systemctl disable log2ram-daily.timer`, if you prefer writing logs only at stop/reboot.
 
