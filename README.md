@@ -118,7 +118,7 @@ SystemMaxUse=20M
 This should be set to a value smaller than the size of the RAM volume, for example half. Then apply the new setting:
 
 ```
-sudo restart systemd-journal
+sudo systemctl restart systemd-journald
 ```
 
 This should shrink the size of "archived" logs to be below the limit. Reboot and check that Log2Ram succeds:
