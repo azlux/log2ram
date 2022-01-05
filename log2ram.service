@@ -1,7 +1,7 @@
 [Unit]
 Description=Log2Ram
 DefaultDependencies=no
-Before=basic.target rsyslog.service syslog-ng.service syslog.target systemd-journald.service sysinit.target shutdown.target zram-swap.service apache2.service lighttpd.service
+Before=basic.target rsyslog.service syslog-ng.service syslog.target systemd-journald.service sysinit.target shutdown.target zram-swap-conf.service apache2.service lighttpd.service
 After=local-fs.target
 Conflicts=shutdown.target reboot.target halt.target
 RequiresMountsFor=/var/log /var/hdd.log
