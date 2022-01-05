@@ -59,6 +59,12 @@ wait_for () {
     while ! findmnt "$1" > /dev/null; do
       sleep 0.1
     done
+    
+    while [ ! -f "$1/log2ram.test" ]; do
+        touch "$1/log2ram.test"
+        sleep 0.1
+    done
+    rm "$1/log2ram.test"
 }
 
 createZramLogDrive () {
@@ -104,6 +110,7 @@ case "$1" in
             wait_for "$RAM_LOG"
             syncFromDisk
         done
+        exit 0
         ;;
 
     stop)
@@ -123,6 +130,7 @@ case "$1" in
             # Unsure as even with Root permision denied
             #echo ${ZRAM_LOG} > /sys/class/zram-control/hot_remove
         done
+        exit 0
         ;;
 
     write)
@@ -136,6 +144,7 @@ case "$1" in
 
             syncToDisk
         done
+        exit 0
         ;;
 
     *)
