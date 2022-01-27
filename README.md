@@ -26,8 +26,7 @@ _____
     sudo apt install log2ram
 
 ### Manually
-    curl -Lo log2ram.tar.gz https://github.com/azlux/log2ram/archive/master.tar.gz
-    tar xf log2ram.tar.gz
+    curl -L https://github.com/azlux/log2ram/archive/master.tar.gz | tar zxf -
     cd log2ram-master
     chmod +x install.sh && sudo ./install.sh
     cd ..
