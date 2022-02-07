@@ -7,7 +7,7 @@ if [ -z "$PATH_DISK" ]; then
 fi
 
 LOG_NAME='log2ram.log'
-
+NO_RSYNC=${USE_RSYNC#true}
 
 isSafe () {
     [ -d "$HDD_LOG" ] || echo "ERROR: $HDD_LOG/ doesn't exist! Can't sync."
@@ -22,7 +22,7 @@ remountOriginal() {
 syncToDisk () {
     isSafe
 
-    if [ -x "$(command -v rsync)" ]; then
+    if [ -z "${NO_RSYNC}" -a -x "$(command -v rsync)" ]; then
         rsync -aXv --inplace --no-whole-file --delete-after "$RAM_LOG"/ "$HDD_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
     else
         cp -rfup "$RAM_LOG"/ -T "$HDD_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
@@ -47,7 +47,7 @@ syncFromDisk () {
         exit 1
     fi
 
-    if [ -x "$(command -v rsync)" ]; then
+    if [ -z "${NO_RSYNC}" -a -x "$(command -v rsync)" ]; then
         rsync -aXv --inplace --no-whole-file --delete-after "$HDD_LOG"/ "$RAM_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
     else
         cp -rfup "$HDD_LOG"/ -T "$RAM_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"

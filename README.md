@@ -66,12 +66,13 @@ You need to stop log2ram (`service log2ram stop`) and start the [install](#insta
 
 ## Customize
 #### variables :
-In the file `/etc/log2ram.conf`, there are three variables:
+In the file `/etc/log2ram.conf`, there are five variables:
 
 - `SIZE`: defines the size the log folder will reserve into the RAM (default is 40M).
-- `MAIL`: Disables the error system mail if there is not enough place on RAM (if set to `false`)
-- `PATH_DISK`: activate log2ram for other path than default one. Paths should be separated with a `;`
-- `ZL2R`: Enable zram compatibility (`false` by default). Check the comment on the config file. See https://github.com/StuartIanNaylor/zram-swap-config to configure a zram space on your raspberry before enable this option.
+- `USE_RSYNC`: (commented out by default = `true`) use `cp` instead of `rsync` (if set to `false`).
+- `MAIL`: disables the error system mail if there is not enough place on RAM (if set to `false`).
+- `PATH_DISK`: activate log2ram for other path than default one. Paths should be separated with a `;`.
+- `ZL2R`: enable zram compatibility (`false` by default). Check the comment on the config file. See https://github.com/StuartIanNaylor/zram-swap-config to configure a zram space on your raspberry before enable this option.
 
 #### refresh time:
 By default Log2Ram writes to disk every day. If you think this is too much, you can run `systemctl edit log2ram-daily.timer` and add:
