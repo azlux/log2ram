@@ -11,10 +11,14 @@
 
 
   vars:
-    apt_keyring_file: azlux.fr.log2ram.gpg
-    apt_sources_file: log2ram.list
+    log2ram_repo_url: http://packages.azlux.fr
+    log2ram_gpg: https://azlux.fr/repo.gpg
+    log2ram_keyring: /usr/share/keyrings/azlux-archive-keyring.gpg
+    log2ram_apt_repository: "deb [signed-by={{ log2ram_keyring }}] {{ log2ram_repo_url }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} main"
 
     log2ram_size: 40M
+    log2ram_use_rsync: true
+    log2ram_mail: true
     log2ram_path_disk: /var/log
     log2ram_use_z2lr: true
     log2ram_comp_alg: lz4
@@ -22,36 +26,31 @@
 
 
   tasks:
-    - name: "Add /etc/apt/sources.list.d/{{ apt_sources_file }}"
-      copy:
-        content: "deb http://packages.azlux.fr/debian/ {{ ansible_facts['distribution_release'] }} main\n"
-        dest: /etc/apt/sources.list.d/{{ apt_sources_file }}
-        mode: 0644
-        owner: root
-      register: source_list
+    - name: Add rsync as pre-requisite
+      apt:
+        name: rsync
+      when: log2ram_use_rsync
 
-    - name: Import apt key
-      apt_key:
-        url: https://azlux.fr/repo.gpg.key
-        id: 98B824A5FA7D3A10FDB225B7CA548A0A0312D8E6
-        keyring: /etc/apt/trusted.gpg.d/{{ apt_keyring_file }}
-      register: dl_key
+    - name: Add gpg key
+      shell: 
+        cmd: >
+          curl -fsSL {{ log2ram_gpg }} | gpg --dearmor --yes -o {{ log2ram_keyring }}
+        creates: "{{ log2ram_keyring }}"
+        
+    - name: Add apt repository
+      apt_repository:
+        repo: "{{ log2ram_apt_repository }}"
+        filename: log2ram
+      register: log2ram_apt_repo
 
-    - name: Remove tilde backup file {{ apt_keyring_file }}~
-      file:
-        path: /etc/apt/trusted.gpg.d/{{ apt_keyring_file }}~
-        state: absent
-
-    - name: update apt cache
+    - name: Update apt cache
       apt:
         update_cache: true
-      when: dl_key is changed or source_list is changed
+      when: log2ram_apt_repo is changed
 
     - name: Install log2ram
       apt:
-        pkg:
-          - log2ram
-      register: pkg
+        name: log2ram
       notify: Restart log2ram
 
     - name: Set config options
@@ -62,6 +61,8 @@
         backrefs: true
       loop:
         - {regexp: '^SIZE=(.*)$', line: 'SIZE={{ log2ram_size }}'}
+        - {regexp: 'USE_RSYNC=(.*)$', line: 'SIZE={{ log2ram_use_rsync }}'}
+        - {regexp: '^MAIL=(.*)$', line: 'SIZE={{ log2ram_mail }}'}
         - {regexp: '^PATH_DISK=(.*)$', line: 'PATH_DISK="{{ log2ram_path_disk }}"'}
         - {regexp: '^ZL2R=(.*)$', line: 'ZL2R={{ log2ram_use_z2lr|lower }}'}
         - {regexp: '^COMP_ALG=(.*)$', line: 'COMP_ALG={{ log2ram_comp_alg }}'}
