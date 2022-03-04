@@ -61,8 +61,8 @@
         backrefs: true
       loop:
         - {regexp: '^SIZE=(.*)$', line: 'SIZE={{ log2ram_size }}'}
-        - {regexp: 'USE_RSYNC=(.*)$', line: 'SIZE={{ log2ram_use_rsync }}'}
-        - {regexp: '^MAIL=(.*)$', line: 'SIZE={{ log2ram_mail }}'}
+        - {regexp: 'USE_RSYNC=(.*)$', line: 'USE_RSYNC={{ log2ram_use_rsync }}'}
+        - {regexp: '^MAIL=(.*)$', line: 'MAIL={{ log2ram_mail }}'}
         - {regexp: '^PATH_DISK=(.*)$', line: 'PATH_DISK="{{ log2ram_path_disk }}"'}
         - {regexp: '^ZL2R=(.*)$', line: 'ZL2R={{ log2ram_use_z2lr|lower }}'}
         - {regexp: '^COMP_ALG=(.*)$', line: 'COMP_ALG={{ log2ram_comp_alg }}'}
