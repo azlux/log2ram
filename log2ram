@@ -89,6 +89,9 @@ case "$1" in
     start)
         IFS=';'
         for i in $PATH_DISK; do
+            # Skip the path if the folder doesn't exist
+            [ ! -d "$i" ] && continue
+            
             PATH_FIRST_PART="${i%/*}"
             PATH_LAST_PART="${i##/*/}"
             RAM_LOG="$i"
