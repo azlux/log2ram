@@ -4,3 +4,5 @@ After=log2ram.service
 
 [Service]
 ExecStart=/bin/systemctl reload log2ram.service
+
+## insert sandboxing here ##
