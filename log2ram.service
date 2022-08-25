@@ -23,7 +23,7 @@ NoNewPriviliges=true
 #PrivateNetwork=true 
   #Will likely break "MAIL" in log2ram.config if does not point to localhost / disabled
 ProtectClock=true
-ProtectControlGroups=
+ProtectControlGroups=true
 ProtectHostname=true
 ProtectKernelLogs=true
 ProtectKernelModules=true
