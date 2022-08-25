@@ -15,12 +15,12 @@ ExecReload= /usr/local/bin/log2ram write
 TimeoutStartSec=120
 RemainAfterExit=yes
 
-#SANDBOXING# -- NEEDS TESTING
+#SANDBOXING# -- partly tested
 LockPersonality=true
 MemoryDenyWriteExecute=true
 NoNewPriviliges=true
-#PrivateDevices=
-#PrivateNetwork=true 
+PrivateDevices=true
+PrivateNetwork=true 
   #Will likely break "MAIL" in log2ram.config if does not point to localhost / disabled
 ProtectClock=true
 ProtectControlGroups=true
@@ -29,8 +29,8 @@ ProtectKernelLogs=true
 ProtectKernelModules=true
 ProtectKernelTunables=true
 RestrictSUIDSGID=true
-ProtectSystem=full
-  # ALT: ProtectSystem=true # if-and-only-if needs /etc, but can whitelist dir prn 
+ProtectSystem=true
+  # ALT: ProtectSystem=full # needs rw whitelisting for /var/hdd.log/ 
 ProtectHome=true 
   #will likely break situations wherein configured to also copy logs from $HOME. 
   #can probably fix with systemctl edit to whitelist relevant dirs 
