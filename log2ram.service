@@ -15,13 +15,13 @@ ExecReload= /usr/local/bin/log2ram write
 TimeoutStartSec=120
 RemainAfterExit=yes
 
-#SANDBOXING# -- partly tested
+# SANDBOXING
 LockPersonality=true
 MemoryDenyWriteExecute=true
 NoNewPriviliges=true
 PrivateDevices=true
 PrivateNetwork=true 
-  #Will likely break "MAIL" in log2ram.config if does not point to localhost / disabled
+  #Will likely break "MAIL" in log2ram.config if does not point to localhost or is unused. 
 ProtectClock=true
 ProtectControlGroups=true
 ProtectHostname=true
@@ -34,9 +34,6 @@ ProtectSystem=true
 ProtectHome=true 
   #will likely break situations wherein configured to also copy logs from $HOME. 
   #can probably fix with systemctl edit to whitelist relevant dirs 
-
-
-
 
 [Install]
 WantedBy=sysinit.target
