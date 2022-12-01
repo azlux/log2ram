@@ -9,9 +9,9 @@ IgnoreOnIsolate=yes
 
 [Service]
 Type=oneshot
-ExecStart= /usr/local/bin/log2ram start
-ExecStop= /usr/local/bin/log2ram stop
-ExecReload= /usr/local/bin/log2ram write
+ExecStart=/usr/local/bin/log2ram start
+ExecStop=/usr/local/bin/log2ram stop
+ExecReload=/usr/local/bin/log2ram write
 TimeoutStartSec=120
 RemainAfterExit=yes
 

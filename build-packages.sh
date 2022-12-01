@@ -19,7 +19,6 @@ new=$(echo $api | grep -Po '"tag_name": "\K.*?(?=")')
 # Remove potential leftovers from a previous build
 rm -rf "$DESTDIR" "$OUTDIR"
 
-
 ## log2ram
 # Create directory
 install -Dm 644 "$STARTDIR/log2ram.service" "$DESTDIR/etc/systemd/system/log2ram.service"
