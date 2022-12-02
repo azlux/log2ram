@@ -1,5 +1,6 @@
 Package: log2ram
 Version: VERSION-TO-REPLACE
+Depends: bash (>= 4.3)
 Section: net
 Priority: optional
 Architecture: all

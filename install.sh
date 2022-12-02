@@ -1,7 +1,7 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 systemctl -q is-active log2ram && {
-    echo "ERROR: log2ram service is still running. Please run \"sudo service log2ram stop\" to stop it."
+    echo "ERROR: log2ram service is still running. Please run \"sudo systemctl stop log2ram\" to stop it."
     exit 1
 }
 [ "$(id -u)" -eq 0 ] || {
