@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 . /etc/log2ram.conf
 
@@ -16,13 +16,36 @@ is_safe() {
     [ -d "$HDD_LOG" ] || exit 1
 }
 
+## @fn journald_logrotate()
+## @brief Logrotate the journal if the current RAM_LOG path is part of the journald directory
+journald_logrotate() {
+    if ! [ -x "$(command -v journalctl)" ] || ! [ "$JOURNALD_AWARE" = true ]; then
+        return 1
+    fi
+
+    if journalctl --header | grep "File path" | grep "$RAM_LOG" >/dev/null 2>&1; then
+        journalctl --rotate
+        return 0
+    else
+        return 1
+    fi
+}
+
 ## @fn sync_to_disk()
 ## @brief Sync memory back to hard disk
 sync_to_disk() {
     is_safe
 
-    if [ -z "${NO_RSYNC}" -a -x "$(command -v rsync)" ]; then
-        rsync -aXv --inplace --no-whole-file --delete-after "$RAM_LOG"/ "$HDD_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
+    optional_params=()
+
+    if journald_logrotate; then
+        optional_params+=("--include=journal/*/*@*.journal")
+        optional_params+=("--exclude=journal/*/*")
+    fi
+
+    if [ -z "${NO_RSYNC}" ] && [ -x "$(command -v rsync)" ]; then
+        rsync -aXv --inplace --no-whole-file --delete-after "${optional_params[@]}" "$RAM_LOG"/ "$HDD_LOG"/ 2>&1 |
+            tee -a "$LOG2RAM_LOG"
     else
         cp -rfup "$RAM_LOG"/ -T "$HDD_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
     fi
@@ -48,7 +71,7 @@ sync_from_disk() {
         exit 1
     fi
 
-    if [ -z "${NO_RSYNC}" -a -x "$(command -v rsync)" ]; then
+    if [ -z "${NO_RSYNC}" ] && [ -x "$(command -v rsync)" ]; then
         rsync -aXv --inplace --no-whole-file --delete-after "$HDD_LOG"/ "$RAM_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
     else
         cp -rfup "$HDD_LOG"/ -T "$RAM_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"

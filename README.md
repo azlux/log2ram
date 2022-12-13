@@ -73,7 +73,7 @@ If you do not get any line as response of these commands, something is not worki
 
 ## Upgrading
 
-You need to stop Log2Ram (`service log2ram stop`) and execute the [installation](#installation) process. If you used APT, this will be done automatically.
+You need to stop Log2Ram (`systemctl stop log2ram`) and execute the [installation](#installation) process. If you used APT, this will be done automatically.
 
 ## Customization
 

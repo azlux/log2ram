@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 if dpkg -l log2ram 2>/dev/null; then
     echo "Please run : apt remove log2ram"
