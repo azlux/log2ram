@@ -63,6 +63,7 @@ sync_from_disk() {
 
     if [ -n "$(du -sh -t "$TP_SIZE" "$HDD_LOG"/ | cut -f1)" ]; then
         echo "ERROR: RAM disk for \"$HDD_LOG/\" too small. Can't sync."
+        echo -e "File(s) causing issues\n: $(du -sh -t "$TP_SIZE" "$HDD_LOG"/*)"
         umount -l "$RAM_LOG"/
         umount -l "$HDD_LOG"/
         if [ "$MAIL" = true ]; then
