@@ -129,6 +129,12 @@ If the `/var/log/journal` is very large, then there are a lot of system logs. De
 SystemMaxUse=20M
 ```
 
+**Or** the more radical version of directly flushing the journal to a size that matches log2ram size imediately _(Be aware that this flish flush the systemd journal logs imediately to the given size!)_
+
+```bash
+journalctl --vacuum-size=32M
+```
+
 This should be set to a value smaller than the size of the RAM volume; for example, half of it could be fine. Then, apply the new setting:
 
 ```bash
