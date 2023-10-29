@@ -95,6 +95,10 @@ By default, Log2Ram writes to disk every day. If you think this is too much, you
 OnCalendar=
 OnCalendar=Mon *-*-* 23:55:00
 ```
+
+Note: 
+The ``OnCalendar=`` is important because it disables all existing times (e.g. the default one) for log2ram.
+
 ... Or even disable it altogether with `systemctl disable log2ram-daily.timer`, if you instead prefer Log2Ram to be writing logs only on system stops/reboots.
 
 #### Compressor
