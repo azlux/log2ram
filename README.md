@@ -37,7 +37,8 @@ cd ..
 rm -r log2ram-master
 ```
 
-For better performances, `RSYNC` is a recommended package.
+For better performances, `rsync` is a recommended package. 
+(Without `rsync`, `cp` will be used instead as fallback).
 
 **REBOOT** before installing anything else (for example `apache2`)
 
@@ -78,10 +79,9 @@ You need to stop Log2Ram (`systemctl stop log2ram`) and execute the [installatio
 ## Customization
 
 #### Variables
-In the file `/etc/log2ram.conf`, there are five variables:
+In the file `/etc/log2ram.conf`, there are four variables:
 
 - `SIZE`: defines the size the log folder will reserve into the RAM (default is 40M).
-- `USE_RSYNC`: (commented out by default = `true`) use `cp` instead of `rsync` (if set to `false`).
 - `MAIL`: disables the error system mail if there is not enough place on RAM (if set to `false`).
 - `PATH_DISK`: activate log2ram for other path than default one. Paths should be separated with a `;`.
 - `ZL2R`: enable zram compatibility (`false` by default). Check the comment on the config file. See https://github.com/StuartIanNaylor/zram-swap-config to configure a zram space on your raspberry before enable this option.
