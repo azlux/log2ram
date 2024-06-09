@@ -59,7 +59,7 @@ The log is also written to `/var/log/log2ram.log`.
 You can also inspect the mount folder in RAM with:
 
 ```bash
-# df -h | grep log2ram
+# df -hT | grep log2ram
 log2ram          40M  532K   40M   2% /var/log
 ```
 or also:
