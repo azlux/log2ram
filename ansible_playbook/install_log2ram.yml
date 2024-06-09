@@ -16,14 +16,14 @@
     log2ram_keyring: /usr/share/keyrings/azlux-archive-keyring.gpg
     log2ram_apt_repository: "deb [signed-by={{ log2ram_keyring }}] {{ log2ram_repo_url }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} main"
 
-    log2ram_size: 40M
+    log2ram_size: 128M
     log2ram_use_rsync: true
     log2ram_notification: true
     log2ram_notification_command: 'mail -s "Log2Ram Error on $HOSTNAME"'
     log2ram_path_disk: /var/log
-    log2ram_use_z2lr: true
+    log2ram_use_z2lr: false
     log2ram_comp_alg: lz4
-    log2ram_log_disk_size: 100M
+    log2ram_log_disk_size: 256M
 
 
   tasks:
