@@ -32,6 +32,10 @@
         name: rsync
       when: log2ram_use_rsync
 
+    - name: Install GnuPG
+      apt:
+        name: gnupg
+
     - name: Add gpg key
       shell: 
         cmd: >
