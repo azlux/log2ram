@@ -13,7 +13,7 @@ DESTDIR="$STARTDIR/pkg"
 OUTDIR="$STARTDIR/deb"
 # get version
 repo="azlux/log2ram"
-api=$(curl --silent "https://api.github.com/repos/$repo/releases/latest")
+api=$(curl --silent "https://api.github.com/repos/$repo/releases" | jq ".[0]")
 new=$(echo $api | grep -Po '"tag_name": "\K.*?(?=")')
 
 # Remove potential leftovers from a previous build

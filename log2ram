@@ -8,6 +8,8 @@ fi
 
 LOG_NAME='log2ram.log'
 NO_RSYNC=${USE_RSYNC#true}
+NOTIFICATION_COMMAND=${NOTIFICATION_COMMAND:=mail -s "Log2Ram Error on $HOSTNAME" root}
+NOTIFICATION=${NOTIFICATION:=true}
 
 ## @fn is_safe()
 ## @brief Check if hdd log exists
@@ -66,8 +68,8 @@ sync_from_disk() {
         echo -e "File(s) causing issues\n: $(du -sh -t "$TP_SIZE" "$HDD_LOG"/*)"
         umount -l "$RAM_LOG"/
         umount -l "$HDD_LOG"/
-        if [ "$MAIL" = true ]; then
-            echo "LOG2RAM : No place on RAM for \"$HDD_LOG/\" anymore, fallback on the disk" | mail -s 'Log2Ram Error' root
+        if [ "$NOTIFICATION" = true ]; then
+            echo "LOG2RAM : No place on RAM for \"$HDD_LOG/\" anymore, fallback on the disk" | $NOTIFICATION_COMMAND
         fi
         exit 1
     fi
