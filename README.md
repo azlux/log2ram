@@ -60,7 +60,7 @@ You can also inspect the mount folder in RAM with:
 
 ```bash
 # df -hT | grep log2ram
-log2ram          40M  532K   40M   2% /var/log
+log2ram  tmpfs  128M  89M  40M  70%  /var/log
 ```
 or also:
 
