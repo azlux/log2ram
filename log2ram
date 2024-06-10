@@ -46,10 +46,10 @@ sync_to_disk() {
     fi
 
     if [ -z "${NO_RSYNC}" ] && [ -x "$(command -v rsync)" ]; then
-        rsync -aXv --inplace --no-whole-file --delete-after "${optional_params[@]}" "$RAM_LOG"/ "$HDD_LOG"/ 2>&1 |
+        rsync -aXv --sparse --inplace --no-whole-file --delete-after "${optional_params[@]}" "$RAM_LOG"/ "$HDD_LOG"/ 2>&1 |
             tee -a "$LOG2RAM_LOG"
     else
-        cp -rfup "$RAM_LOG"/ -T "$HDD_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
+        cp -rfup --sparse=always "$RAM_LOG"/ -T "$HDD_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
     fi
 }
 
@@ -75,9 +75,9 @@ sync_from_disk() {
     fi
 
     if [ -z "${NO_RSYNC}" ] && [ -x "$(command -v rsync)" ]; then
-        rsync -aXv --inplace --no-whole-file --delete-after "$HDD_LOG"/ "$RAM_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
+        rsync -aXv --sparse --inplace --no-whole-file --delete-after "$HDD_LOG"/ "$RAM_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
     else
-        cp -rfup "$HDD_LOG"/ -T "$RAM_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
+        cp -rfup --sparse=always "$HDD_LOG"/ -T "$RAM_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
     fi
 
 }
