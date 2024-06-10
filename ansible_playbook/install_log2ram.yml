@@ -16,13 +16,14 @@
     log2ram_keyring: /usr/share/keyrings/azlux-archive-keyring.gpg
     log2ram_apt_repository: "deb [signed-by={{ log2ram_keyring }}] {{ log2ram_repo_url }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} main"
 
-    log2ram_size: 40M
+    log2ram_size: 128M
     log2ram_use_rsync: true
-    log2ram_mail: true
+    log2ram_notification: true
+    log2ram_notification_command: 'mail -s "Log2Ram Error on $HOSTNAME"'
     log2ram_path_disk: /var/log
-    log2ram_use_z2lr: true
+    log2ram_use_z2lr: false
     log2ram_comp_alg: lz4
-    log2ram_log_disk_size: 100M
+    log2ram_log_disk_size: 256M
 
 
   tasks:
@@ -30,6 +31,10 @@
       apt:
         name: rsync
       when: log2ram_use_rsync
+
+    - name: Install GnuPG
+      apt:
+        name: gnupg
 
     - name: Add gpg key
       shell: 
@@ -62,7 +67,8 @@
       loop:
         - {regexp: '^SIZE=(.*)$', line: 'SIZE={{ log2ram_size }}'}
         - {regexp: 'USE_RSYNC=(.*)$', line: 'USE_RSYNC={{ log2ram_use_rsync }}'}
-        - {regexp: '^MAIL=(.*)$', line: 'MAIL={{ log2ram_mail }}'}
+        - {regexp: '^NOTIFICATION=(.*)$', line: 'NOTIFICATION={{ log2ram_notification }}'}
+        - {regexp: '^NOTIFICATION_COMMAND=(.*)$', line: 'NOTIFICATION_COMMAND={{ log2ram_notification_command }}'}
         - {regexp: '^PATH_DISK=(.*)$', line: 'PATH_DISK="{{ log2ram_path_disk }}"'}
         - {regexp: '^ZL2R=(.*)$', line: 'ZL2R={{ log2ram_use_z2lr|lower }}'}
         - {regexp: '^COMP_ALG=(.*)$', line: 'COMP_ALG={{ log2ram_comp_alg }}'}
