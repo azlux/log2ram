@@ -59,14 +59,30 @@ The log is also written to `/var/log/log2ram.log`.
 You can also inspect the mount folder in RAM with:
 
 ```bash
-# df -h | grep log2ram
-log2ram          40M  532K   40M   2% /var/log
+df -hT | grep log2ram | awk '{print " Name: " $1 "\nMount: " $7 "\n Type: " $2 "\nUsage: " $6 "\n Size: " $3 "\n Used: " $4 "\n Free: " $5}'
 ```
-or also:
+Returns:
+```bash
+ Name: log2ram
+Mount: /var/log
+ Type: tmpfs
+Usage: 72%
+ Size: 128M
+ Used: 93M
+ Free: 36M
+```
+
+Or also:
 
 ```bash
-# mount | grep log2ram
-log2ram on /var/log type tmpfs (rw,nosuid,nodev,noexec,relatime,size=40960k,mode=755)
+mount | grep log2ram | awk -F'[ ()]+' '{print "   Name: " $1 "\n  Mount: " $3 "\n   Type: " $5 "\nOptions: " $6}'
+```
+Returns:
+```bash
+   Name: log2ram
+  Mount: /var/log
+   Type: tmpfs
+Options: rw,nosuid,nodev,noexec,noatime,size=131072k,mode=755,uid=100000,gid=100000,inode64
 ```
 
 If you do not get any line as response of these commands, something is not working. Refer to [this section](#is-it-working).
