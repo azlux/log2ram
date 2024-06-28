@@ -94,13 +94,17 @@ You need to stop Log2Ram (`systemctl stop log2ram`) and execute the [installatio
 ## Customization
 
 #### Variables
-In the file `/etc/log2ram.conf`, there are five variables:
+In the file `/etc/log2ram.conf`, there are nine variables:
 
-- `SIZE`: defines the size the log folder will reserve into the RAM (default is 40M).
+- `SIZE`: defines the size the log folder will reserve into the RAM (default is `128M`).
 - `USE_RSYNC`: (commented out by default = `true`) use `cp` instead of `rsync` (if set to `false`).
-- `MAIL`: disables the error system mail if there is not enough place on RAM (if set to `false`).
+- `NOTIFICATION`: disables the notification system mail if there is not enough place in RAM (if set to `false`).
+- `NOTIFICATION_COMMAND`: Specify the command for sending error notifications (By default, it uses the `mail` command).
 - `PATH_DISK`: activate log2ram for other path than default one. Paths should be separated with a `;`.
-- `ZL2R`: enable zram compatibility (`false` by default). Check the comment on the config file. See https://github.com/StuartIanNaylor/zram-swap-config to configure a zram space on your raspberry before enable this option.
+- `JOURNALD_AWARE`: enable log rotation for journald logs before syncing. (default is `true`). Check the comment in the config file or the [Troubleshooting](#Troubleshooting) section below for journald SystemMaxUse recommendations.
+- `ZL2R`: enable zram compatibility (`false` by default). Check the comment in the config file. See https://github.com/StuartIanNaylor/zram-swap-config to configure a zram space on your raspberry before enabling this option.
+- `COMP_ALG`: choose a compression algorithm from those listed in /proc/crypto. (default is `lz4`). See [Compressor](#Compressor) section below for options.
+- `LOG_DISK_SIZE`: specifies the uncompressed zram disk size
 
 #### Refresh time
 
@@ -118,7 +122,7 @@ The ``OnCalendar=`` is important because it disables all existing times (e.g. th
 ... Or even disable it altogether with `systemctl disable log2ram-daily.timer`, if you instead prefer Log2Ram to be writing logs only on system stops/reboots.
 
 #### Compressor
-Compressor for ZRAM. Useful for the `COMP_ALG` of ZRAM on the config file.
+Compressor for ZRAM. Useful for the `COMP_ALG` of ZRAM in the config file.
 
 | Compressor name	     | Ratio	| Compression | Decompress. |
 |------------------------|----------|-------------|-------------|
