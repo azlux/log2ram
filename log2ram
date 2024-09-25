@@ -2,6 +2,7 @@
 
 # HTs 2024-09-25: - repeated start) (without stop) does not cause additional "mount --bind" anymore
 #                 - LOG2RAM_LOG, extended by sync_to_disk, is rescued, when sync_to_disk
+#                 - cleanup at stop)
 
 . /etc/log2ram.conf
 
@@ -173,6 +174,10 @@ stop)
         umount -l "$HDD_LOG"/
         # Unsure as even with Root permision denied
         #echo ${ZRAM_LOG} > /sys/class/zram-control/hot_remove
+
+        # ++HTs 2024-09-25: cleanup
+        rm -rf "$HDD_LOG"
+
     done
     exit 0
     ;;
