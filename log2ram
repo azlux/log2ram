@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# HTs 2024-09-25: - repeated start) (without stop) does not cause additional "mount --bind" anymore
+
 . /etc/log2ram.conf
 
 if [ -z "$PATH_DISK" ]; then
@@ -127,20 +129,25 @@ start)
         HDD_LOG="${PATH_FIRST_PART}/hdd.${PATH_LAST_PART}"
         LOG2RAM_LOG="${RAM_LOG}/${LOG_NAME}"
 
-        [ -d "$HDD_LOG" ] || mkdir "$HDD_LOG"
+        # ++HTs 2024-09-25: if HDD_LOG is already mounted, log2ram was started. mounting a second time is counterproductive
+        mount | grep "$HDD_LOG" 2>&1 > /dev/null
+        if [ $? != 0 ]; then
+            # not found, it seems log2ram (for this path) is not started yet
+            [ -d "$HDD_LOG" ] || mkdir "$HDD_LOG"
 
-        mount --bind "$RAM_LOG"/ "$HDD_LOG"/
-        mount --make-private "$HDD_LOG"/
-        wait_for "$HDD_LOG"
+            mount --bind "$RAM_LOG"/ "$HDD_LOG"/
+            mount --make-private "$HDD_LOG"/
+            wait_for "$HDD_LOG"
 
-        if [ "$ZL2R" = true ]; then
-            create_zram_log_drive
-            mount -t ext4 -o nosuid,noexec,noatime,nodev,user=log2ram "/dev/zram${RAM_DEV}" "$RAM_LOG"/
-        else
-            mount -t tmpfs -o "nosuid,noexec,noatime,nodev,mode=0755,size=${SIZE}" log2ram "$RAM_LOG"/
+            if [ "$ZL2R" = true ]; then
+                create_zram_log_drive
+                mount -t ext4 -o nosuid,noexec,noatime,nodev,user=log2ram "/dev/zram${RAM_DEV}" "$RAM_LOG"/
+            else
+                mount -t tmpfs -o "nosuid,noexec,noatime,nodev,mode=0755,size=${SIZE}" log2ram "$RAM_LOG"/
+            fi
+            wait_for "$RAM_LOG"
+            sync_from_disk
         fi
-        wait_for "$RAM_LOG"
-        sync_from_disk
     done
     exit 0
     ;;
