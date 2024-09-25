@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # HTs 2024-09-25: - repeated start) (without stop) does not cause additional "mount --bind" anymore
+#                 - LOG2RAM_LOG, extended by sync_to_disk, is rescued, when sync_to_disk
 
 . /etc/log2ram.conf
 
@@ -53,6 +54,10 @@ sync_to_disk() {
     else
         cp -rfup --sparse=always "$RAM_LOG"/ -T "$HDD_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
     fi
+
+    # ++HTs 2024-09-25: LOG2RAM_LOG, extended by sync_to_disk, needs to be rescued separately
+    cp "$LOG2RAM_LOG" "$HDD_LOG"/
+
 }
 
 ## @fn sync_from_disk()
