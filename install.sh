@@ -36,7 +36,7 @@ rm -rf /var/log.hdd
 rm -rf /var/hdd.log
 
 # Include config to check if size is enought (See below) 
-source ./log2ram.conf
+source /etc/log2ram.conf
 
 # Validates that the SIZE variable is defined in the log2ram configuration file.
 # Exits with an error message if the SIZE variable is not set, preventing further installation.
