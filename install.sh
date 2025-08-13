@@ -35,5 +35,31 @@ rm -rf /var/log.hdd
 # Make sure we start clean
 rm -rf /var/hdd.log
 
+# Include config to check if size is enought (See below) 
+source /etc/log2ram.conf
+
+# Validates that the SIZE variable is defined in the log2ram configuration file.
+# Exits with an error message if the SIZE variable is not set, preventing further installation.
+if [ -z "$SIZE" ]; then
+  echo "ERROR: SIZE variable is not defined in /etc/log2ram.conf"
+  exit 1
+fi
+
+# Checks if the size of /var/log exceeds the specified SIZE threshold
+# Returns an error if the size check fails or if the directory cannot be measured
+# Exits the script with an error message if du command encounters issues
+if ! du_output=$(du -sh -t "$SIZE" /var/log 2>/dev/null); then
+  echo "ERROR: Failed to check size of /var/log"
+  exit 1
+fi
+
+# Check if var SIZE is sufficient and show a warning when too small
+if [ -n "$du_output" ] ; then
+  echo 'WARNING: Variable SIZE in /etc/log2ram.conf is too small to store the /var/log!'
+  echo -n 'Actual size of /var/log is:'
+  du -sh /var/log
+  echo -e '\nPlease increase SIZE in /etc/log2ram.conf to avoid issues'
+fi
+
 echo "#####         Reboot to activate log2ram         #####"
 echo "##### edit /etc/log2ram.conf to configure options ####"
