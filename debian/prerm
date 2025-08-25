@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
+
 case "$1" in
-    upgrade)
-        [ -d  /run/systemd/system/ ] && systemctl stop log2ram.service log2ram-daily.timer
-        exit 0
-        ;;
-    *)
-        [ -d  /run/systemd/system/ ] && systemctl stop log2ram.service log2ram-daily.timer
-        [ -d  /run/systemd/system/ ] && systemctl disable log2ram.service log2ram-daily.timer
-        exit 0
-        ;;
+upgrade)
+    [[ -d /run/systemd/system/ ]] && systemctl stop log2ram.service log2ram-daily.timer
+    exit 0
+    ;;
+*)
+    [[ -d /run/systemd/system/ ]] && systemctl stop log2ram.service log2ram-daily.timer
+    [[ -d /run/systemd/system/ ]] && systemctl disable log2ram.service log2ram-daily.timer
+    exit 0
+    ;;
 esac
