@@ -24,70 +24,70 @@ CONFIG=/etc/log2ram.conf
 
 # Source function library.
 if [ -f /etc/init.d/functions ]; then
-      . /etc/init.d/functions
+    . /etc/init.d/functions
 elif [ -f /etc/rc.d/init.d/functions ]; then
-      . /etc/rc.d/init.d/functions
+    . /etc/rc.d/init.d/functions
 fi
 
-
 case "$1" in
-  start)
+start)
     echo -n "Starting log2ram: "
     #touch /data/log2ram.started.$(date +"%Y-%m-%d_%T")
     ${LOG2RAM_SCRIPT} start
     RETVAL=$?
-    if [ $RETVAL -eq 0 ] ; then
+    if [ $RETVAL -eq 0 ]; then
         echo "OK"
     else
         echo "FAIL"
     fi
     ;;
-  stop)
+stop)
     echo -n "Stopping log2ram: "
     #touch /data/log2ram.stopped.$(date +"%Y-%m-%d_%T")
     ${LOG2RAM_SCRIPT} stop
     RETVAL=$?
-    if [ $RETVAL -eq 0 ] ; then
+    if [ $RETVAL -eq 0 ]; then
         echo "OK"
     else
         echo "FAIL"
     fi
     ;;
-  sync)
+sync)
     echo -n "This operation is generally provided by cron."
     while true; do
-    read -p "Continue (y/n)?" choice
-    case ${choice} in
-        [Yy]* ) break;;
-        [Nn]* ) exit 1;;
-        * ) echo "Please answer yes or no.";;
-    esac
-        done
+        read -p "Continue (y/n)?" choice
+        case ${choice} in
+        [Yy]*) break ;;
+        [Nn]*) exit 1 ;;
+        *) echo "Please answer yes or no." ;;
+        esac
+    done
 
     echo -n "Force log2ram write to disk on-the-fly from the cli: "
     #touch /data/log2ram.synched.$(date +"%Y-%m-%d_%T")
     ${LOG2RAM_SCRIPT} write
     RETVAL=$?
-    if [ $RETVAL -eq 0 ] ; then
+    if [ $RETVAL -eq 0 ]; then
         echo "OK"
     else
         echo "FAIL"
     fi
     ;;
-  status)
-    cat /proc/mounts | grep -w log2ram > /dev/null && { echo -ne "log2ram is running\n"; };
-    cat /proc/mounts | grep -w log2ram > /dev/null || { echo -ne "log2ram is NOT running\n"; };
+status)
+    cat /proc/mounts | grep -w log2ram >/dev/null && { echo -ne "log2ram is running\n"; }
+    cat /proc/mounts | grep -w log2ram >/dev/null || { echo -ne "log2ram is NOT running\n"; }
     exit $?
     ;;
-  restart)
+restart)
     $0 stop && sleep 1 && $0 start
     ;;
-  force-reload)
+force-reload)
     $0 stop && sleep 1 && $0 start
     ;;
-  *)
+*)
     echo "Usage: /etc/init.d/$(basename $0) {start|stop|sync|status|restart}"
     exit 1
+    ;;
 esac
 
 exit 0
