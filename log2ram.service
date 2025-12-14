@@ -16,5 +16,25 @@ ExecReload=/usr/local/bin/log2ram write
 TimeoutStartSec=120
 RemainAfterExit=yes
 
+# Sandboxing
+LockPersonality=true
+MemoryDenyWriteExecute=true
+NoNewPriviliges=true
+PrivateDevices=true
+PrivateNetwork=true 
+  #May break "MAIL" in log2ram.conf if it points to non-local web address. 
+ProtectClock=true
+ProtectControlGroups=true
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+RestrictSUIDSGID=true
+ProtectSystem=true
+  # ALT: ProtectSystem=full # needs rw whitelisting for /var/hdd.log/ 
+ProtectHome=true 
+  #may cause breakage in situations wherein user has configured log2ram to also copy logs from $HOME. 
+  #can probably fix with systemctl edit to whitelist relevant dirs. See: ReadWritePaths=
+
 [Install]
 WantedBy=sysinit.target
