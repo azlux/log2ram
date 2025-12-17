@@ -1,4 +1,5 @@
 # Log2Ram
+
 Log2Ram works just like ramlog for systemd (on Debian 8 Jessie for example).
 
 Useful for **RaspberryPi** for not writing on the SD card all the time. You need it because your SD card doesn't want to suffer anymore!
@@ -7,10 +8,12 @@ Explanations: The script creates a `/var/log` mount point in RAM. So any writing
 
 [Log2Ram](https://github.com/azlux/log2ram)'s script works on every Linux system. If you don't have Systemd, you can still use Log2Ram with your own daemon manager.
 
-Log2Ram is based on transient /var/log for Systemd. For more information, check [here](https://www.debian-administration.org/article/661/A_transient_/var/log).
+Log2Ram is based on transient `/var/log` for Systemd. For more information, check [here](https://www.debian-administration.org/article/661/A_transient_/var/log).
 
-_____
+---
+
 ## Table of Contents
+
 1. [Installation](#installation)
 2. [Is it working?](#is-it-working)
 3. [Upgrading](#upgrading)
@@ -19,14 +22,31 @@ _____
 6. [Uninstallation](#uninstallation-)
 
 ## Installation
-### Via APT (recommended) (genericized)
+
+### Via APT (recommended) (generalized)
 
 ```bash
 echo "deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ $(bash -c '. /etc/os-release; echo ${VERSION_CODENAME}') main" | sudo tee /etc/apt/sources.list.d/azlux.list
-sudo wget -O /usr/share/keyrings/azlux-archive-keyring.gpg  https://azlux.fr/repo.gpg
+sudo wget -O /usr/share/keyrings/azlux-archive-keyring.gpg https://azlux.fr/repo.gpg
 sudo apt update
 sudo apt install log2ram
 ```
+
+#### Debian 13 (Trixie)
+
+Due to the issue described in [log2ram#259](https://github.com/azlux/log2ram/issues/259), Debian 13 Trixie users may need to ensure that APT installs Log2Ram from the correct source.  
+To do this, create an APT pinning file that gives Log2Ram a higher priority:
+
+```bash
+sudo tee "/etc/apt/preferences.d/log2ram.pref" >/dev/null <<EOF
+Package: log2ram
+Pin: origin packages.azlux.fr
+Pin-Priority: 1001
+EOF
+```
+
+This forces APT to prefer the Log2Ram package from `packages.azlux.fr`, which avoids installation issues on Debian 13 until the upstream problem is resolved.
+
 ### Manually
 
 ```bash
@@ -42,6 +62,7 @@ For better performances, `RSYNC` is a recommended package.
 **REBOOT** before installing anything else (for example `apache2`)
 
 ## Is it working?
+
 After installing and rebooting, use systemctl to check if Log2Ram started successfully:
 
 ```bash
@@ -61,7 +82,9 @@ You can also inspect the mount folder in RAM with:
 ```bash
 df -hT | grep log2ram | awk '{print " Name: " $1 "\nMount: " $7 "\n Type: " $2 "\nUsage: " $6 "\n Size: " $3 "\n Used: " $4 "\n Free: " $5}'
 ```
+
 Returns:
+
 ```bash
  Name: log2ram
 Mount: /var/log
@@ -77,7 +100,9 @@ Or also:
 ```bash
 mount | grep log2ram | awk -F'[ ()]+' '{print "   Name: " $1 "\n  Mount: " $3 "\n   Type: " $5 "\nOptions: " $6}'
 ```
+
 Returns:
+
 ```bash
    Name: log2ram
   Mount: /var/log
@@ -93,7 +118,8 @@ You need to stop Log2Ram (`systemctl stop log2ram`) and execute the [installatio
 
 ## Customization
 
-#### Variables
+### Variables
+
 In the file `/etc/log2ram.conf`, there are nine variables:
 
 - `SIZE`: defines the size the log folder will reserve into the RAM (default is `128M`).
@@ -101,12 +127,12 @@ In the file `/etc/log2ram.conf`, there are nine variables:
 - `NOTIFICATION`: disables the notification system mail if there is not enough place in RAM (if set to `false`).
 - `NOTIFICATION_COMMAND`: Specify the command for sending error notifications (By default, it uses the `mail` command).
 - `PATH_DISK`: activate log2ram for other path than default one. Paths should be separated with a `;`.
-- `JOURNALD_AWARE`: enable log rotation for journald logs before syncing. (default is `true`). Check the comment in the config file or the [Troubleshooting](#Troubleshooting) section below for journald SystemMaxUse recommendations.
-- `ZL2R`: enable zram compatibility (`false` by default). Check the comment in the config file. See https://github.com/StuartIanNaylor/zram-swap-config to configure a zram space on your raspberry before enabling this option.
-- `COMP_ALG`: choose a compression algorithm from those listed in /proc/crypto. (default is `lz4`). See [Compressor](#Compressor) section below for options.
+- `JOURNALD_AWARE`: enable log rotation for journald logs before syncing. (default is `true`). Check the comment in the config file or the [Troubleshooting](#troubleshooting) section below for journald SystemMaxUse recommendations.
+- `ZL2R`: enable zram compatibility (`false` by default). Check the comment in the config file. See <https://github.com/StuartIanNaylor/zram-swap-config> to configure a zram space on your raspberry before enabling this option.
+- `COMP_ALG`: choose a compression algorithm from those listed in /proc/crypto. (default is `lz4`). See [Compressor](#compressor) section below for options.
 - `LOG_DISK_SIZE`: specifies the uncompressed zram disk size
 
-#### Refresh time
+### Refresh time
 
 By default, Log2Ram writes to disk every day. If you think this is too much, you can run `systemctl edit log2ram-daily.timer` and for example add:
 
@@ -116,26 +142,27 @@ OnCalendar=
 OnCalendar=Mon *-*-* 23:55:00
 ```
 
-Note: 
-The ``OnCalendar=`` is important because it disables all existing times (e.g. the default one) for log2ram.
+Note:
+The `OnCalendar=` line is important because it disables all existing times (e.g. the default one) for log2ram.
 
 ... Or even disable it altogether with `systemctl disable log2ram-daily.timer`, if you instead prefer Log2Ram to be writing logs only on system stops/reboots.
 
-#### Compressor
+### Compressor
+
 Compressor for ZRAM. Useful for the `COMP_ALG` of ZRAM in the config file.
 
-| Compressor name	     | Ratio	| Compression | Decompress. |
-|------------------------|----------|-------------|-------------|
-|zstd 1.3.4 -1	         | 2.877	| 470 MB/s	  | 1380 MB/s   |
-|zlib 1.2.11 -1	         | 2.743    | 110 MB/s    | 400 MB/s    |
-|brotli 1.0.2 -0	     | 2.701	| 410 MB/s	  | 430 MB/s    |
-|quicklz 1.5.0 -1	     | 2.238	| 550 MB/s	  | 710 MB/s    |
-|lzo1x 2.09 -1	         | 2.108	| 650 MB/s	  | 830 MB/s    |
-|lz4 1.8.1	             | 2.101    | 750 MB/s    | 3700 MB/s   |
-|snappy 1.1.4	         | 2.091	| 530 MB/s	  | 1800 MB/s   |
-|lzf 3.6 -1	             | 2.077	| 400 MB/s	  | 860 MB/s    |
+| Compressor name      | Ratio  | Compression | Decompression |
+|----------------------|--------|-------------|---------------|
+| zstd 1.3.4 -1        | 2.877  | 470 MB/s    | 1380 MB/s     |
+| zlib 1.2.11 -1       | 2.743  | 110 MB/s    | 400 MB/s      |
+| brotli 1.0.2 -0      | 2.701  | 410 MB/s    | 430 MB/s      |
+| quicklz 1.5.0 -1     | 2.238  | 550 MB/s    | 710 MB/s      |
+| lzo1x 2.09 -1        | 2.108  | 650 MB/s    | 830 MB/s      |
+| lz4 1.8.1            | 2.101  | 750 MB/s    | 3700 MB/s     |
+| snappy 1.1.4         | 2.091  | 530 MB/s    | 1800 MB/s     |
+| lzf 3.6 -1           | 2.077  | 400 MB/s    | 860 MB/s      |
 
-###### Now, muffins for everyone!
+### Now, muffins for everyone!
 
 ## Troubleshooting
 
