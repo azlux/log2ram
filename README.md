@@ -4,7 +4,7 @@ Log2Ram works just like ramlog for systemd (on Debian 8 Jessie for example).
 
 Useful for **Raspberry Pi** for not writing on the SD card all the time. You need it because your SD card doesn't want to suffer anymore!
 
-Explanations: The script creates a `/var/log` mount point in RAM. So any writing of the log to the `/var/log` folder will not actually be written to disk (in this case to the SD card on a Raspberry Pi) but directly to RAM. By default, every day the CRON will synchronize the contents in RAM with the folder located on the physical disk. The script will also make this copy of RAM to disk in case of machine shutdowns (but, of course, it still won't do it in case of power failures). This way you can avoid excessive writing on the SD card and extend its life.
+Explanation: The script creates a `/var/log` mount point in RAM. So any writing of the log to the `/var/log` folder will not actually be written to disk (in this case to the SD card on a Raspberry Pi) but directly to RAM. By default, every day the CRON job will synchronize the contents in RAM with the folder located on the physical disk. The script will also make this copy of RAM to disk in case of machine shutdowns (but, of course, it still won't do it in case of power failures). This way you can avoid excessive writing on the SD card and extend its life.
 
 [Log2Ram](https://github.com/azlux/log2ram)'s script works on every Linux system. If you don't have Systemd, you can still use Log2Ram with your own daemon manager.
 
@@ -57,7 +57,7 @@ cd ..
 rm -r log2ram-master
 ```
 
-For better performances, `RSYNC` is a recommended package.
+For better performances, `rsync` is a recommended package.
 
 **REBOOT** before installing anything else (for example `apache2`)
 
@@ -127,7 +127,7 @@ In the file `/etc/log2ram.conf`, there are nine variables:
 - `NOTIFICATION`: disables the notification system mail if there is not enough place in RAM (if set to `false`).
 - `NOTIFICATION_COMMAND`: Specify the command for sending error notifications (By default, it uses the `mail` command).
 - `PATH_DISK`: activate log2ram for other path than default one. Paths should be separated with a `;`.
-- `JOURNALD_AWARE`: enable log rotation for journald logs before syncing. (default is `true`). Check the comment in the config file or the [Troubleshooting](#troubleshooting) section below for journald SystemMaxUse recommendations.
+- `JOURNALD_AWARE`: enable log rotation for journald logs before syncing. (default is `true`). Check the comment in the config file or the [Troubleshooting](#troubleshooting) section below for journald `SystemMaxUse` recommendations.
 - `ZL2R`: enable zram compatibility (`false` by default). Check the comment in the config file. See <https://github.com/systemd/zram-generator> to configure a zram swap on your Raspberry Pi before enabling this option.
 - `COMP_ALG`: choose a compression algorithm from those listed in /proc/crypto. (default is `lz4`). See [Compressor](#compressor) section below for options.
 - `LOG_DISK_SIZE`: specifies the uncompressed zram disk size
@@ -142,8 +142,7 @@ OnCalendar=
 OnCalendar=Mon *-*-* 23:55:00
 ```
 
-Note:
-The `OnCalendar=` line is important because it disables all existing times (e.g. the default one) for log2ram.
+**Note**: The `OnCalendar=` line is important because it disables all existing times (e.g. the default one) for log2ram.
 
 ... Or even disable it altogether with `systemctl disable log2ram-daily.timer`, if you instead prefer Log2Ram to be writing logs only on system stops/reboots.
 
@@ -162,7 +161,7 @@ Compressor for ZRAM. Useful for the `COMP_ALG` of ZRAM in the config file.
 | snappy 1.1.4         | 2.091  | 530 MB/s    | 1800 MB/s     |
 | lzf 3.6 -1           | 2.077  | 400 MB/s    | 860 MB/s      |
 
-### Now, muffins for everyone!
+**Now, muffins for everyone!**
 
 ## Troubleshooting
 
