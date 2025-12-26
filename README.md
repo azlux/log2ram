@@ -2,7 +2,7 @@
 
 Log2Ram works just like ramlog for systemd (on Debian 8 Jessie for example).
 
-Useful for **RaspberryPi** for not writing on the SD card all the time. You need it because your SD card doesn't want to suffer anymore!
+Useful for **Raspberry Pi** for not writing on the SD card all the time. You need it because your SD card doesn't want to suffer anymore!
 
 Explanations: The script creates a `/var/log` mount point in RAM. So any writing of the log to the `/var/log` folder will not actually be written to disk (in this case to the SD card on a Raspberry Pi) but directly to RAM. By default, every day the CRON will synchronize the contents in RAM with the folder located on the physical disk. The script will also make this copy of RAM to disk in case of machine shutdowns (but, of course, it still won't do it in case of power failures). This way you can avoid excessive writing on the SD card and extend its life.
 
@@ -128,7 +128,7 @@ In the file `/etc/log2ram.conf`, there are nine variables:
 - `NOTIFICATION_COMMAND`: Specify the command for sending error notifications (By default, it uses the `mail` command).
 - `PATH_DISK`: activate log2ram for other path than default one. Paths should be separated with a `;`.
 - `JOURNALD_AWARE`: enable log rotation for journald logs before syncing. (default is `true`). Check the comment in the config file or the [Troubleshooting](#troubleshooting) section below for journald SystemMaxUse recommendations.
-- `ZL2R`: enable zram compatibility (`false` by default). Check the comment in the config file. See <https://github.com/StuartIanNaylor/zram-swap-config> to configure a zram space on your raspberry before enabling this option.
+- `ZL2R`: enable zram compatibility (`false` by default). Check the comment in the config file. See <https://github.com/systemd/zram-generator> to configure a zram swap on your Raspberry Pi before enabling this option.
 - `COMP_ALG`: choose a compression algorithm from those listed in /proc/crypto. (default is `lz4`). See [Compressor](#compressor) section below for options.
 - `LOG_DISK_SIZE`: specifies the uncompressed zram disk size
 
