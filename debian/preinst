@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-systemctl -q is-active log2ram.service  && systemctl stop log2ram.service
-systemctl -q is-active log2ram-daily.timer  && systemctl stop log2ram-daily.timer
+
+systemctl -q is-active log2ram.service && systemctl stop log2ram.service
+systemctl -q is-active log2ram-daily.timer && systemctl stop log2ram-daily.timer
+
 rm -rf /var/hdd.log
 
 exit 0
