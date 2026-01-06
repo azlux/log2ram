@@ -179,7 +179,7 @@ If the `/var/log/journal` is very large, then there are a lot of system logs. De
 SystemMaxUse=20M
 ```
 
-**Or** the more radical version of directly flushing the journal to a size that matches log2ram size imediately _(Be aware that this flish flush the systemd journal logs imediately to the given size!)_
+**Or** the more radical version of directly flushing the journal to a size that matches log2ram size immediately _(Be aware that this will flush the systemd journal logs immediately to the given size!)_
 
 ```bash
 journalctl --vacuum-size=32M
