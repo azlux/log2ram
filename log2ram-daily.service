@@ -5,3 +5,20 @@ Documentation=https://github.com/azlux/log2ram
 
 [Service]
 ExecStart=/bin/systemctl reload log2ram.service
+
+# Sandboxing
+LockPersonality=true
+MemoryDenyWriteExecute=true
+NoNewPriviliges=true
+PrivateDevices=true
+PrivateNetwork=true 
+  #May affect "Mail" in log2ram.conf.
+ProtectClock=true
+ProtectControlGroups=true
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+RestrictSUIDSGID=true
+ProtectSystem=strict
+ProtectHome=true 
