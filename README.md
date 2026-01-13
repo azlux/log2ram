@@ -26,26 +26,20 @@ Log2Ram is based on transient `/var/log` for Systemd. For more information, chec
 ### Via APT (recommended) (generalized)
 
 ```bash
-echo "deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ $(bash -c '. /etc/os-release; echo ${VERSION_CODENAME}') main" | sudo tee /etc/apt/sources.list.d/azlux.list
+. /etc/os-release
 sudo wget -O /usr/share/keyrings/azlux-archive-keyring.gpg https://azlux.fr/repo.gpg
-sudo apt update
-sudo apt install log2ram
-```
-
-#### Debian 13 (Trixie)
-
-Due to the issue described in [log2ram#259](https://github.com/azlux/log2ram/issues/259), Debian 13 Trixie users may need to ensure that APT installs Log2Ram from the correct source.  
-To do this, create an APT pinning file that gives Log2Ram a higher priority:
-
-```bash
-sudo tee "/etc/apt/preferences.d/log2ram.pref" >/dev/null <<EOF
+sudo tee /etc/apt/sources.list.d/azlux.list >/dev/null <<EOF
+deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ $VERSION_CODENAME main
+EOF
+# Debian 13 Trixie needs a better Log2Ram source; see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1122989
+[ "$VERSION_CODENAME" = trixie ] && sudo tee /etc/apt/preferences.d/log2ram.pref >/dev/null <<EOF
 Package: log2ram
 Pin: origin packages.azlux.fr
 Pin-Priority: 1001
 EOF
+sudo apt update
+sudo apt install log2ram
 ```
-
-This forces APT to prefer the Log2Ram package from `packages.azlux.fr`, which avoids installation issues on Debian 13 until the upstream problem is resolved.
 
 ### Manually
 
