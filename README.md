@@ -31,7 +31,7 @@ sudo wget -O /usr/share/keyrings/azlux-archive-keyring.gpg https://azlux.fr/repo
 sudo tee /etc/apt/sources.list.d/azlux.list >/dev/null <<EOF
 deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ $VERSION_CODENAME main
 EOF
-# Debian 13 Trixie needs a better Log2Ram source; see https://github.com/azlux/log2ram/issues/259
+# Debian 13 Trixie needs a better Log2Ram source; see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1122989
 [ "$VERSION_CODENAME" = trixie ] && sudo tee /etc/apt/preferences.d/log2ram.pref >/dev/null <<EOF
 Package: log2ram
 Pin: origin packages.azlux.fr
