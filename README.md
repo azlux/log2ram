@@ -31,9 +31,7 @@ sudo wget -O /usr/share/keyrings/azlux-archive-keyring.gpg https://azlux.fr/repo
 sudo tee /etc/apt/sources.list.d/azlux.list >/dev/null <<EOF
 deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ $VERSION_CODENAME main
 EOF
-# due to https://github.com/azlux/log2ram/issues/259 Debian 13 Trixie need a better Log2Ram source
-# create an APT pinning file with a higher priority so APT prefers the Log2Ram package from `packages.azlux.fr`
-# this avoid installation issues on Debian 13 until the upstream problem is resolved
+# Debian 13 Trixie needs a better Log2Ram source; see https://github.com/azlux/log2ram/issues/259
 [ "$VERSION_CODENAME" = trixie ] && sudo tee /etc/apt/preferences.d/log2ram.pref >/dev/null <<EOF
 Package: log2ram
 Pin: origin packages.azlux.fr
